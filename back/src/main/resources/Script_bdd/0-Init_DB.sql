@@ -1,0 +1,76 @@
+-- =====================
+-- TABLE USERS
+-- =====================
+CREATE TABLE users (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    pseudo VARCHAR(50) NOT NULL,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    roles NVARCHAR(MAX) NOT NULL
+);
+
+-- =====================
+-- TABLE CATEGORIE
+-- =====================
+CREATE TABLE categorie (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nom VARCHAR(50) NOT NULL
+);
+
+-- =====================
+-- TABLE LIVRE
+-- =====================
+CREATE TABLE livre (
+    isbn VARCHAR(20) PRIMARY KEY,
+    couverture VARCHAR(255),
+    titre VARCHAR(255) NOT NULL,
+    auteur VARCHAR(255),
+    description TEXT,
+    nb_exemplaires INT DEFAULT 0,
+    date_ajout DATE,
+    is_active BIT DEFAULT 1,
+    categorie_id INT,
+    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
+);
+
+-- =====================
+-- TABLE STATUT
+-- =====================
+CREATE TABLE statut (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nom VARCHAR(50) NOT NULL
+);
+
+-- =====================
+-- TABLE EMPRUNT
+-- =====================
+CREATE TABLE emprunt (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    livre_isbn VARCHAR(20) NOT NULL,
+    statut_id INT,
+    date_demande DATE,
+    date_emprunt DATE,
+    date_retour_previsionnel DATE,
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (livre_isbn) REFERENCES livre(isbn),
+    FOREIGN KEY (statut_id) REFERENCES statut(id)
+);
+
+-- =====================
+-- TABLE FEEDBACK
+-- =====================
+CREATE TABLE feedback (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    livre_isbn VARCHAR(20) NOT NULL,
+    note INT CHECK (note BETWEEN 1 AND 5),
+    commentaire TEXT,
+    date_publication DATE,
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (livre_isbn) REFERENCES livre(isbn)
+);
