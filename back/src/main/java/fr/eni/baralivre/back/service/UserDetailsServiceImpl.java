@@ -1,13 +1,18 @@
 package fr.eni.baralivre.back.service;
 
 
+import fr.eni.baralivre.back.dto.SecurityUser;
 import fr.eni.baralivre.back.entity.User;
 import fr.eni.baralivre.back.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -26,10 +31,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user== null) {
             throw  new UsernameNotFoundException("User not found");
         }
-        return  new org.springframework.security.core.userdetails.User(
+        return  new SecurityUser(
                 user.getEmail(),
-                user.getPassword()
-               // user.getRole() add additional claim here
+                user.getPassword(),
+                user.getRole().getLabel()
         );
+    }
+    public String getUserRole(String username) {
+        try {
+            User user = userRepository.findByEmail(username);
+            return user.getRole().getLabel();
+        } catch (Exception e) {
+            throw new EntityNotFoundException(e);
+        }
     }
 }
