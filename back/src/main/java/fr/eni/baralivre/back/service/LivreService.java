@@ -8,19 +8,23 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LivreService {
-    List<Livre> findAllLivre();
+    List<LivreDTO> findAllLivre();
 
-    Optional<Livre> findLivreByTitre(String titre);
+    List<LivreDTO> findLivreByTitre(String titre);
 
-    Optional<Livre> findLivreByIsbn(String isbn);
+    Optional<LivreDTO> findLivreByIsbn(String isbn);
 
-    Optional<Livre> findLivreByAuteur(String auteur);
+    Optional<LivreDTO> findLivreByAuteur(String auteur);
 
-    Optional<Livre> findAllLivreByCategorie(Categorie categorie);
+    List<LivreDTO> findLivreByCategorie(List<Integer> categorieIds);
 
-    Livre ajouterLivre(LivreDTO livreDTO);
+    List<LivreDTO> search(List<Integer> categorieIds, String titre);
+
+    // List<Livre> findLivreByCategorieAndTitre(List<Integer> categorieIds, String titre);
+
+    Livre ajouterLivre(Livre livre);
 
     Livre retirerLivre(String isbn);
 
-    Livre update(LivreDTO livreDTO);
+    Livre update(Livre livre);
 }

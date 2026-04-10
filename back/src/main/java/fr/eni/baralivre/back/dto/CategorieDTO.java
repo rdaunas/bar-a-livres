@@ -8,5 +8,6 @@ import lombok.*;
 @Setter
 @Builder
 public class CategorieDTO {
-    private String nom;
+    public Integer id;
+    public String nom;
 }

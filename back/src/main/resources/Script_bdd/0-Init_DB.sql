@@ -32,8 +32,7 @@ CREATE TABLE livre (
     date_ajout DATE,
     is_active BIT DEFAULT 1,
     categorie_id INT,
-    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
-);
+    );
 
 -- =====================
 -- TABLE STATUT
@@ -73,4 +72,15 @@ CREATE TABLE feedback (
 
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (livre_isbn) REFERENCES livre(isbn)
+);
+
+-- =====================
+-- TABLE MANY TO MANY LIVRE_CATEGORIE
+-- =====================
+CREATE TABLE livre_categorie (
+    livre_isbn VARCHAR(20),
+    categorie_id INT,
+    PRIMARY KEY (livre_isbn, categorie_id),
+    FOREIGN KEY (livre_isbn) REFERENCES livre(isbn),
+    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
 );
