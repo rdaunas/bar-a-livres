@@ -1,7 +1,9 @@
 package fr.eni.baralivre.back.service;
 
 import fr.eni.baralivre.back.entity.Emprunt;
+import fr.eni.baralivre.back.entity.Status;
 import fr.eni.baralivre.back.repository.EmpruntRepository;
+import fr.eni.baralivre.back.repository.StatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class EmpruntServiceImpl implements EmpruntService {
 
     private EmpruntRepository empruntRepository;
+    private StatusRepository statusRepository;
 
     @Override
     public Emprunt chargerUnEmprunt(int id) {
@@ -21,7 +24,7 @@ public class EmpruntServiceImpl implements EmpruntService {
         }
         final List<Emprunt> emprunt = empruntRepository.findEmpruntById(id);
         if (!emprunt.isEmpty()) {
-            return emprunt.get(0);
+            return emprunt.getFirst();
         }
         throw new RuntimeException("emprunt not found");
     }
@@ -45,7 +48,56 @@ public class EmpruntServiceImpl implements EmpruntService {
             throw new RuntimeException("Utilisateur inconnu");
         }
         final LocalDateTime todayDate = LocalDateTime.now();
-        final List<Emprunt> empruntsRetard = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(userID, "En cours",todayDate);
-        return empruntsRetard;
+        return empruntRepository.findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(userID, "En cours",todayDate);
+    }
+
+    @Override
+    public Emprunt creerEmprunt(Integer userId, String livreIsbn) {
+        if (userId == null){
+            throw new RuntimeException("Utilisateur inconnu");
+        }
+        if (livreIsbn == null){
+            throw new RuntimeException("ISBN du livre invalide");
+        }
+        List<Emprunt> empruntsEnCours = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatus(userId, "En cours");
+        if(empruntsEnCours.size() >=3){
+            throw new RuntimeException("Vous avez atteint le nombre maximum d'emprunts");
+        }
+        List<Emprunt> empruntsRetard = chargerLesStatusDesEmpruntParUserId(userId);
+        if(!empruntsRetard.isEmpty()){
+            throw new RuntimeException("Vous avez des emprunts en retard");
+        }
+
+        // TODO : Vérifier que le livre existe et est disponible
+        // TODO : Décrémenter le nombre d'exemplaires disponibles
+
+        final LocalDateTime todayDate = LocalDateTime.now();
+        Status statusEmprunt = statusRepository.findByTypeStatus("En cours").orElseThrow(() -> new RuntimeException("Statut 'En cours' non trouvé"));
+        Emprunt emprunt = Emprunt.builder()
+                .userId(userId)
+                .livreIsbn(livreIsbn)
+                .dateDemande(todayDate)
+                .dateEmprunt(todayDate)
+                .dateRetourPrevisionnel(todayDate.plusDays(14))
+                .status(statusEmprunt)
+                .build();
+        return empruntRepository.save(emprunt);
+    }
+
+    @Override
+    public Emprunt retournerEmprunt(int empruntId) {
+        if (empruntId <= 0){
+            throw new RuntimeException("id d'emprunt invalide");
+        }
+        Emprunt emprunt = chargerUnEmprunt(empruntId);
+
+        if(!emprunt.getStatus().getTypeStatus().equals("En cours")){
+            throw new RuntimeException("Emprunt non en cours");
+        }
+    Status statusRetourne = statusRepository.findByTypeStatus("Terminé").orElseThrow(() -> new RuntimeException("Status de retour non trouvé"));
+    emprunt.setStatus(statusRetourne);
+
+        // TODO : Incrémenter le nombre d'exemplaires disponibles du livre
+        return empruntRepository.save(emprunt);
     }
 }

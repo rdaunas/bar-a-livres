@@ -2,10 +2,8 @@ package fr.eni.baralivre.back.repository;
 
 
 import fr.eni.baralivre.back.entity.Emprunt;
-import fr.eni.baralivre.back.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
 
     List<Emprunt> findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(Integer userId, String statusTypeStatus, LocalDateTime dateRetourPrevisionnel);
 
-
+    List<Emprunt> findEmpruntByUserIdAndStatus_TypeStatus(Integer userId, String statusTypeStatus);
 
 
 }

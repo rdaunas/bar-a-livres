@@ -22,19 +22,19 @@ public class Emprunt {
     private Integer userId;
 
     @Column(name = "livre_isbn",   nullable = false, length = 13)
-    private Long livreIsbn;
+    private String livreIsbn;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "statut_id")
     private Status status;
 
     @Column(name = "date_demande",   nullable = false)
     private LocalDateTime dateDemande;
 
-    @Column(name = "date_emprunt",   nullable = true)
+    @Column(name = "date_emprunt")
     private LocalDateTime dateEmprunt;
 
-    @Column(name = "date_retour_previsionnel",   nullable = true)
+    @Column(name = "date_retour_previsionnel")
     private LocalDateTime dateRetourPrevisionnel;
 
 }
