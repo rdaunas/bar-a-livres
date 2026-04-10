@@ -4,6 +4,7 @@ import fr.eni.baralivre.back.dto.LivreDTO;
 import fr.eni.baralivre.back.entity.Livre;
 import fr.eni.baralivre.back.service.LivreService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import lombok.AllArgsConstructor;
@@ -20,10 +21,22 @@ import java.util.Optional;
 public class LivreController {
     private LivreService livreService;
 
+//    @GetMapping("/books")
+//    public ResponseEntity<?> findAllBooks() {
+//        List<LivreDTO> livres = livreService.findAllLivre();
+//        if (livres == null || livres.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(livres, HttpStatus.OK);
+//    }
+
     @GetMapping("/books")
-    public ResponseEntity<?> findAllBooks() {
-        List<LivreDTO> livres = livreService.findAllLivre();
-        if (livres == null || livres.isEmpty()) {
+    public ResponseEntity<?> findAllBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Page<LivreDTO> livres = livreService.findAllLivre(page, size);
+        if (livres.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(livres, HttpStatus.OK);
@@ -113,5 +126,15 @@ public class LivreController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         }
     }
+
+    @DeleteMapping ("/books/{isbn}")
+    public ResponseEntity<?> deleteLivreByIsbn(@PathVariable("isbn") String isbn) {
+        Livre livreByIsbn = livreService.retirerLivre(isbn);
+        if (isbn.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(livreByIsbn, HttpStatus.OK);
+    }
+
 
 }
