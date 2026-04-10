@@ -5,9 +5,12 @@ import fr.eni.baralivre.back.entity.Role;
 import fr.eni.baralivre.back.entity.User;
 import fr.eni.baralivre.back.repository.UserRepository;
 import fr.eni.baralivre.back.security.JwtUtil;
+import fr.eni.baralivre.back.service.InscriptionService;
 import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +27,7 @@ public class AuthController {
     private final PasswordEncoder encoder;
     private final JwtUtil jwtUtils;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final InscriptionService inscriptionService;
 
     @Autowired
     public AuthController(
@@ -31,12 +35,13 @@ public class AuthController {
             UserRepository userRepository,
             PasswordEncoder encoder,
             JwtUtil jwtUtils,
-            UserDetailsServiceImpl userDetailsServiceImpl) {
+            UserDetailsServiceImpl userDetailsServiceImpl, InscriptionService inscriptionService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.inscriptionService = inscriptionService;
     }
 
 
@@ -57,18 +62,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String registerUser(@RequestBody UserDTO user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return "User already exists!";
-        }
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO user) {
 
-        final User newUser = new User(
-                user.getEmail(),
-                encoder.encode(user.getPassword()),
-                new Role()
-        );
-        userRepository.save(newUser);
-        return "User registered successfully!";
+        if(inscriptionService.inscrire(user)) {
+            return new  ResponseEntity<>("Inscription réussie", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("L'utilisateur existe déjà.", HttpStatus.BAD_REQUEST);
+
     }
     @GetMapping("/test")
     public String test() {
