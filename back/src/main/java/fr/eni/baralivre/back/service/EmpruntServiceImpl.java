@@ -44,8 +44,8 @@ public class EmpruntServiceImpl implements EmpruntService {
         if (userID == null){
             throw new RuntimeException("Utilisateur inconnu");
         }
-        final LocalDateTime todayDate = LocalDateTime.
-        final List<Emprunt> empruntsRetard = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(userID, "En cours", )
-
+        final LocalDateTime todayDate = LocalDateTime.now();
+        final List<Emprunt> empruntsRetard = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(userID, "En cours",todayDate);
+        return empruntsRetard;
     }
 }

@@ -22,7 +22,7 @@ public class Emprunt {
     private Integer userId;
 
     @Column(name = "livre_isbn",   nullable = false, length = 13)
-    private Integer livreIsbn;
+    private Long livreIsbn;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
