@@ -95,8 +95,8 @@ public class LivreServiceImpl implements LivreService {
     }
 
     @Override
-    public List<LivreDTO> search(List<Integer> categorieIds, String titre) {
-
+    public Page<LivreDTO> search(List<Integer> categorieIds, String titre, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         if (categorieIds != null && categorieIds.isEmpty()) {
             categorieIds = null;
         }
@@ -104,10 +104,8 @@ public class LivreServiceImpl implements LivreService {
             titre = null;
         }
 
-        return livreRepository.search(categorieIds, titre)
-                .stream()
-                .map(this::toDTO)
-                .toList();
+        return livreRepository.search(categorieIds, titre, pageable)
+                .map(this::toDTO);
     }
 
 //    @Override

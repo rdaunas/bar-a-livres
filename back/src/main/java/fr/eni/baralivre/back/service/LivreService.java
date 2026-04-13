@@ -21,7 +21,7 @@ public interface LivreService {
 
     List<LivreDTO> findLivreByCategorie(List<Integer> categorieIds);
 
-    List<LivreDTO> search(List<Integer> categorieIds, String titre);
+    Page<LivreDTO> search(List<Integer> categorieIds, String titre, int page, int size);
 
     // List<Livre> findLivreByCategorieAndTitre(List<Integer> categorieIds, String titre);
 

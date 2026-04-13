@@ -106,9 +106,11 @@ public class LivreController {
     @GetMapping("/books/search")
     public ResponseEntity<?> findLivreByCategoriesAndTitre(
             @RequestParam(required = false) List<Integer> categorieIds,
-            @RequestParam(required = false) String titre) {
+            @RequestParam(required = false) String titre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
 
-        List<LivreDTO> livres = livreService.search(categorieIds, titre);
+        Page<LivreDTO> livres = livreService.search(categorieIds, titre, page, size);
 
         if (livres.isEmpty()) {
             return ResponseEntity.notFound().build();
