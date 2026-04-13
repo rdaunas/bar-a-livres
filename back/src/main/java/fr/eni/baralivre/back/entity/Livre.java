@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 public class Livre {
 
     @Id
-    @Column(name = "isbn", nullable = false, length = 13)
+    @Column(name = "isbn", nullable = false, length = 20)
     String isbn;
 
     @Column(name = "couverture", length = 255)
@@ -30,20 +31,23 @@ public class Livre {
     @Column(name = "auteur", nullable = false, length = 255)
     String auteur;
 
-    @Column(name = "description", nullable = false)
     String description;
 
     @Column(name = "nb_exemplaires")
-    Integer nbExemplaire;
+    int nbExemplaire;
 
     @Column(name = "date_ajout")
     LocalDateTime dateAjout;
+
 
     @Column(name = "is_active")
     boolean isActive;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "categorie_id")
-    private Categorie categorie;
-
+    @JoinTable(
+            name = "livre_categorie",
+            joinColumns = @JoinColumn(name = "livre_isbn"),
+            inverseJoinColumns = @JoinColumn(name = "categorie_id")
+    )
+    private Set<Categorie> categories;
 }

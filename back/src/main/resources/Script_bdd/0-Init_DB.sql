@@ -1,14 +1,22 @@
 -- =====================
 -- TABLE USERS
 -- =====================
+CREATE TABLE role (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    label VARCHAR(20)
+)
+
+-- =====================
+-- TABLE USERS
+-- =====================
 CREATE TABLE users (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    pseudo VARCHAR(50) NOT NULL,
     nom VARCHAR(100),
     prenom VARCHAR(100),
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    roles NVARCHAR(MAX) NOT NULL
+    role_id INT NOT NULL
+    FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 -- =====================
@@ -32,8 +40,7 @@ CREATE TABLE livre (
     date_ajout DATE,
     is_active BIT DEFAULT 1,
     categorie_id INT,
-    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
-);
+    );
 
 -- =====================
 -- TABLE STATUT
@@ -73,4 +80,15 @@ CREATE TABLE feedback (
 
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (livre_isbn) REFERENCES livre(isbn)
+);
+
+-- =====================
+-- TABLE MANY TO MANY LIVRE_CATEGORIE
+-- =====================
+CREATE TABLE livre_categorie (
+    livre_isbn VARCHAR(20),
+    categorie_id INT,
+    PRIMARY KEY (livre_isbn, categorie_id),
+    FOREIGN KEY (livre_isbn) REFERENCES livre(isbn),
+    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
 );
