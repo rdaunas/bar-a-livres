@@ -22,5 +22,6 @@ public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
 
     List<Emprunt> findEmpruntByUserIdAndStatus_TypeStatus(Integer userId, String statusTypeStatus);
 
+    List<Emprunt> findEmpruntByLivreIsbnAndStatus_TypeStatus(String livreIsbn, String statusTypeStatus);
 
 }

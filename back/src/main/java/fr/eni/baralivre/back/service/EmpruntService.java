@@ -14,6 +14,8 @@ public interface EmpruntService {
 
     List<Emprunt> chargerLesStatusDesEmpruntParUserId(Integer userID);
 
+    List<Emprunt> chargerLesStatusDesEmpruntParIsbn(String livreIsbn);
+
     Emprunt creerEmprunt(Integer userId, String livreIsbn);
 
     Emprunt retournerEmprunt(int empruntId);

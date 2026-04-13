@@ -1,5 +1,6 @@
 package fr.eni.baralivre.back.service;
 
+import fr.eni.baralivre.back.dto.LivreDTO;
 import fr.eni.baralivre.back.entity.Emprunt;
 import fr.eni.baralivre.back.entity.Status;
 import fr.eni.baralivre.back.repository.EmpruntRepository;
@@ -16,6 +17,8 @@ public class EmpruntServiceImpl implements EmpruntService {
 
     private EmpruntRepository empruntRepository;
     private StatusRepository statusRepository;
+    private LivreService livreService;
+
 
     @Override
     public Emprunt chargerUnEmprunt(int id) {
@@ -52,6 +55,14 @@ public class EmpruntServiceImpl implements EmpruntService {
     }
 
     @Override
+    public List<Emprunt> chargerLesStatusDesEmpruntParIsbn(String livreIsbn) {
+        if (livreIsbn == null){
+            throw new RuntimeException("ISBN du livre invalide");
+        }
+        return empruntRepository.findEmpruntByLivreIsbnAndStatus_TypeStatus(livreIsbn, "En cours");
+    }
+
+    @Override
     public Emprunt creerEmprunt(Integer userId, String livreIsbn) {
         if (userId == null){
             throw new RuntimeException("Utilisateur inconnu");
@@ -59,6 +70,7 @@ public class EmpruntServiceImpl implements EmpruntService {
         if (livreIsbn == null){
             throw new RuntimeException("ISBN du livre invalide");
         }
+
         List<Emprunt> empruntsEnCours = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatus(userId, "En cours");
         if(empruntsEnCours.size() >=3){
             throw new RuntimeException("Vous avez atteint le nombre maximum d'emprunts");
@@ -69,9 +81,12 @@ public class EmpruntServiceImpl implements EmpruntService {
                 throw new RuntimeException("Vous avez des emprunts en retard");
             }
         }
-
-        // TODO : Vérifier que le livre existe et est disponible
-        // TODO : Décrémenter le nombre d'exemplaires disponibles
+        LivreDTO exemplaires = livreService.findLivreByIsbn(livreIsbn).orElseThrow();
+        int nbExmplaires = exemplaires.getNbExemplaire();
+        int nbExemplairesDispo = nbExmplaires - empruntRepository.findEmpruntByLivreIsbnAndStatus_TypeStatus(livreIsbn, "En cours").size();
+        if (nbExemplairesDispo <= 0){
+            throw new RuntimeException("Le livre n'est plus disponible");
+        }
 
         final LocalDateTime todayDate = LocalDateTime.now();
         Status statusEmprunt = statusRepository.findByTypeStatus("En cours").orElseThrow(() -> new RuntimeException("Statut 'En cours' non trouvé"));
@@ -99,7 +114,6 @@ public class EmpruntServiceImpl implements EmpruntService {
     Status statusRetourne = statusRepository.findByTypeStatus("Terminé").orElseThrow(() -> new RuntimeException("Status de retour non trouvé"));
     emprunt.setStatus(statusRetourne);
 
-        // TODO : Incrémenter le nombre d'exemplaires disponibles du livre
         return empruntRepository.save(emprunt);
     }
 
