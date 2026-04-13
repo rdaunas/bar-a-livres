@@ -14,15 +14,6 @@ public interface LivreRepository extends JpaRepository<Livre, String> {
 
     Optional<Livre> findByIsbn(String isbn);
 
-    // Rechercher une liste de livre par son auteur
-    Optional<Livre> findByAuteur(String auteur);
-
-    // Rechercher un livre par son titre
-    List<Livre> findByTitre(String titre);
-
-    // Rechercher un livre par son/ses catégorie
-    List<Livre> findDistinctByCategoriesIdIn(List<Integer> categorieIds);
-
     @Query("""
             SELECT l
             FROM Livre l
@@ -35,6 +26,4 @@ public interface LivreRepository extends JpaRepository<Livre, String> {
             """)
     Page<Livre> search(@Param("categorieIds") List<Integer> categorieIds, @Param("titre") String titre, Pageable pageable);
 
-    // Rechercher un livre par son/ses catégorie et/ou son titre
-    List<Livre> findDistinctByCategoriesIdInAndTitreContainingIgnoreCase(List<Integer> categorieIds, String titre);
 }
