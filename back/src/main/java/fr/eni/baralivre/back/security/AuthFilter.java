@@ -20,12 +20,13 @@ import java.io.IOException;
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-    public static final String BEARER_ = "Bearer ";
-    @Autowired
-    private JwtUtil jwtUtil;
+    public static final String BEARER = "Bearer ";
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private JwtUtil jwtUtil;
+    @Autowired
+    private  UserDetailsServiceImpl userDetailsService;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -56,8 +57,8 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-        if (headerAuth != null && headerAuth.startsWith(BEARER_)) {
-            return headerAuth.substring(BEARER_.length());
+        if (headerAuth != null && headerAuth.startsWith(BEARER)) {
+            return headerAuth.substring(BEARER.length());
         }
         return null;
     }

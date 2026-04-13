@@ -17,10 +17,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
+
+    private final  AuthEntryPoint unauthorizedHandler;
+
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private AuthEntryPoint unauthorizedHandler;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPoint unauthorizedHandler) {
+
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public AuthFilter authenticationJwtTokenFilter() {
@@ -60,8 +64,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("LIBRARIAN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/books").hasRole("ADMIN")
 
-                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")//.hasAnyRole("CLIENT", "OWNER")
-                                .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")//.hasAnyRole("CLIENT", "OWNER")
+                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
+                                .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
                                 .requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER")
                                 .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").hasRole("LIBRARIAN")
 
@@ -71,7 +75,6 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/test").hasAnyRole("LIBRARIAN", "ADMIN","USER")
                                 .anyRequest().authenticated()
                 );
 
