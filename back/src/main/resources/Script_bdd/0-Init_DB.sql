@@ -1,14 +1,22 @@
 -- =====================
 -- TABLE USERS
 -- =====================
+CREATE TABLE role (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    label VARCHAR(20)
+)
+
+-- =====================
+-- TABLE USERS
+-- =====================
 CREATE TABLE users (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    pseudo VARCHAR(50) NOT NULL,
     nom VARCHAR(100),
     prenom VARCHAR(100),
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    roles NVARCHAR(MAX) NOT NULL
+    role_id INT NOT NULL
+    FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 -- =====================
