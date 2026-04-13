@@ -1,6 +1,8 @@
 package fr.eni.baralivre.back.repository;
 
 import fr.eni.baralivre.back.entity.Livre;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,7 +33,7 @@ public interface LivreRepository extends JpaRepository<Livre, String> {
                 )
             )
             """)
-    List<Livre> search(@Param("categorieIds") List<Integer> categorieIds, @Param("titre") String titre);
+    Page<Livre> search(@Param("categorieIds") List<Integer> categorieIds, @Param("titre") String titre, Pageable pageable);
 
     // Rechercher un livre par son/ses catégorie et/ou son titre
     List<Livre> findDistinctByCategoriesIdInAndTitreContainingIgnoreCase(List<Integer> categorieIds, String titre);
