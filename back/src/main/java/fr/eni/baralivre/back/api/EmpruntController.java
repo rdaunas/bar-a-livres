@@ -2,7 +2,10 @@ package fr.eni.baralivre.back.api;
 
 import fr.eni.baralivre.back.dto.EmpruntResquestDTO;
 import fr.eni.baralivre.back.entity.Emprunt;
+import fr.eni.baralivre.back.security.JwtUtil;
 import fr.eni.baralivre.back.service.EmpruntService;
+import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import java.util.List;
 public class EmpruntController {
 
     private EmpruntService empruntService;
+    private JwtUtil jwtUtil;
 
     @GetMapping("/{id}")
     public ResponseEntity<Emprunt> getEmpruntById(@PathVariable int id) {
@@ -33,10 +37,21 @@ public class EmpruntController {
         return ResponseEntity.ok(emprunts);
     }
 
+    public Integer extractUserId(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token manquant");
+        }
+
+        String token = authHeader.substring(7);
+        return Integer.valueOf(jwtUtil.getUserFromToken(token));
+    }
+
     @GetMapping("/my")
-    public ResponseEntity<List<Emprunt>> getMesEmprunts() {
+    public ResponseEntity<List<Emprunt>> getMesEmprunts(HttpServletRequest request) {
         try {
-            // TODO: Récupérer userId avec l'authentification
+            //Integer userId = extractUserId(request);
             Integer userId = 4;
             List<Emprunt> emprunts = empruntService.chargerToutLesEmpruntParUserId(userId);
             return ResponseEntity.ok(emprunts);

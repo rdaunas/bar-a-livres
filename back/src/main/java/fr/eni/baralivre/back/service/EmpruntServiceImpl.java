@@ -102,4 +102,5 @@ public class EmpruntServiceImpl implements EmpruntService {
         // TODO : Incrémenter le nombre d'exemplaires disponibles du livre
         return empruntRepository.save(emprunt);
     }
+
 }

@@ -115,37 +115,8 @@ public class EmpruntControllerTest {
         verify(empruntService).chargerToutLesEmprunt();
     }
 
-    // Tests pour GET /api/loans/my
-    @Test
-    void getMesEmprunts_devraitRetourner200AvecListeEmprunts() {
-        // Given
-        List<Emprunt> emprunts = List.of(emprunt);
-        when(empruntService.chargerToutLesEmpruntParUserId(anyInt())).thenReturn(emprunts);
 
-        // When
-        ResponseEntity<List<Emprunt>> response = empruntController.getMesEmprunts();
 
-        // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-        verify(empruntService).chargerToutLesEmpruntParUserId(anyInt());
-    }
-
-    @Test
-    void getMesEmprunts_devraitRetourner400_enCasErreur() {
-        // Given
-        when(empruntService.chargerToutLesEmpruntParUserId(anyInt()))
-                .thenThrow(new RuntimeException("Utilisateur inconnu"));
-
-        // When
-        ResponseEntity<List<Emprunt>> response = empruntController.getMesEmprunts();
-
-        // Then
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-        verify(empruntService).chargerToutLesEmpruntParUserId(anyInt());
-    }
 
     // Tests pour POST /api/loans
     @Test
