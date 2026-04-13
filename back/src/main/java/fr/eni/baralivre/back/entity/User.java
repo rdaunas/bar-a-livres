@@ -2,11 +2,13 @@ package fr.eni.baralivre.back.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
@@ -17,16 +19,13 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "pseudo", nullable = false, length = 50)
-    private String pseudo;
-
     @Column(name = "nom", length = 100)
     private String nom;
 
     @Column(name = "prenom", length = 100)
     private String prenom;
 
-    @Column(name = "email", nullable = false, length = 150, unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password", nullable = false)
