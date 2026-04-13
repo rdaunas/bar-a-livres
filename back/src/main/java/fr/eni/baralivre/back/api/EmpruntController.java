@@ -37,7 +37,7 @@ public class EmpruntController {
     public ResponseEntity<List<Emprunt>> getMesEmprunts() {
         try {
             // TODO: Récupérer userId avec l'authentification
-            Integer userId = 1;
+            Integer userId = 4;
             List<Emprunt> emprunts = empruntService.chargerToutLesEmpruntParUserId(userId);
             return ResponseEntity.ok(emprunts);
         } catch (RuntimeException e) {
@@ -47,7 +47,7 @@ public class EmpruntController {
     @PostMapping
     public ResponseEntity<Emprunt> emprunterLivre(@RequestBody EmpruntResquestDTO request) {
         try {
-            Integer userId = 1;
+            Integer userId = 4;
             Emprunt emprunt = empruntService.creerEmprunt(userId, request.getLivreIsbn());
             return ResponseEntity.ok(emprunt);
         } catch (RuntimeException e) {
