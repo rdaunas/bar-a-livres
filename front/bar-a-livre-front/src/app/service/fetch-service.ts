@@ -1,5 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 
 @Injectable({
@@ -16,26 +17,29 @@ export class FetchService {
    */
 
   public login(username: string,password: string ) {
-    fetch('http://localhost:8080/api/v1/signin', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-    }).then(res => res.json()).then(data => {
-      localStorage.setItem('token', data.accessToken);
-    })
+    this.http
+      .post<string>('http://localhost:8080/api/v1/signin', {
+        body: {
+          username: username,
+          password: password
+        }
+      })
+      .subscribe((token) => {
+        return token;
+      });
   }
 
   public signUp(username: string, password: string, lastName: string, firstName: string) {
     try {
-      fetch('http://localhost:8080/api/v1/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify({
+      this.http.post<string>('http://localhost:8080/api/v1/auth/signup', {
+        body:{
           email:username,
           password: password,
           nom: lastName,
           prenom: firstName
-        })
-      }).then(res => res.json()).then(data => {
-        return data.toString();
+        }
+      }).subscribe(retour => {
+        return retour;
       })
     }
     catch (e : any) {
