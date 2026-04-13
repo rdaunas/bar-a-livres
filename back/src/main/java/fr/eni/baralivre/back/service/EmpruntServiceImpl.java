@@ -47,8 +47,8 @@ public class EmpruntServiceImpl implements EmpruntService {
         if (userID == null){
             throw new RuntimeException("Utilisateur inconnu");
         }
-        final LocalDateTime todayDate = LocalDateTime.now();
-        return empruntRepository.findEmpruntByUserIdAndStatus_TypeStatusAndDateRetourPrevisionnelBefore(userID, "En cours",todayDate);
+
+        return empruntRepository.findEmpruntByUserIdAndStatus_TypeStatus(userID, "En cours");
     }
 
     @Override
@@ -63,9 +63,11 @@ public class EmpruntServiceImpl implements EmpruntService {
         if(empruntsEnCours.size() >=3){
             throw new RuntimeException("Vous avez atteint le nombre maximum d'emprunts");
         }
-        List<Emprunt> empruntsRetard = chargerLesStatusDesEmpruntParUserId(userId);
-        if(!empruntsRetard.isEmpty()){
-            throw new RuntimeException("Vous avez des emprunts en retard");
+        List<Emprunt> emprunts = chargerLesStatusDesEmpruntParUserId(userId);
+        for (Emprunt emprunt : emprunts) {
+            if (LocalDateTime.now().isAfter(emprunt.getDateRetourPrevisionnel())) {
+                throw new RuntimeException("Vous avez des emprunts en retard");
+            }
         }
 
         // TODO : Vérifier que le livre existe et est disponible

@@ -20,5 +20,5 @@ Content-Type: application/json
 }
 
 ### PUT - Retourner un livre
-PUT {{baseUrl}}/api/loans/4/return
+PUT {{baseUrl}}/api/loans/12/return
 
