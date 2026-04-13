@@ -58,7 +58,8 @@ public class AuthController {
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info(userDetails.getAuthorities().toString());
         log.info(userDetailsServiceImpl.getUserRole(userDetails.getUsername()));
-        return jwtUtils.generateToken(userDetails.getUsername(),userDetailsServiceImpl.getUserRole(userDetails.getUsername()));
+        User AutnehticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
+        return jwtUtils.generateToken(userDetails.getUsername(),AutnehticatedUser.getNom(),AutnehticatedUser.getPrenom(),AutnehticatedUser.getId(),AutnehticatedUser.getRole().getLabel());
     }
 
     @PostMapping("/signup")

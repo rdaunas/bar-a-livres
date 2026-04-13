@@ -37,6 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getRole().getLabel()
         );
     }
+    public User getUserInformation(String email) {
+        return userRepository.findByEmail(email);
+    }
     public String getUserRole(String username) {
         try {
             User user = userRepository.findByEmail(username);
