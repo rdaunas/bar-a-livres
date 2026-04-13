@@ -3,16 +3,17 @@ package fr.eni.baralivre.back.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     @Value("${jwt.secret}")
@@ -30,11 +31,10 @@ public class JwtUtil {
     public String generateToken(String email,String nom,String prenom,int id, String role) {
 
         return Jwts.builder()
-                .subject(String.valueOf(id))
-                .claim("nom", nom).claim("prenom", prenom).claim("email",email)
+                .subject(email)
+                .claim("nom", nom).claim("prenom", prenom).claim("id",id).claim("role",role)
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + jwtExpiration))
-                .claims().add("role",role).and()
+                .expiration(new Date(new Date().getTime() + 86400000))
                 .signWith(key).compact();
 
     }

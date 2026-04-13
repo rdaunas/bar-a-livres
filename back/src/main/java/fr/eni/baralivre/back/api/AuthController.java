@@ -58,8 +58,8 @@ public class AuthController {
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info(userDetails.getAuthorities().toString());
         log.info(userDetailsServiceImpl.getUserRole(userDetails.getUsername()));
-        User AutnehticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
-        return jwtUtils.generateToken(userDetails.getUsername(),AutnehticatedUser.getNom(),AutnehticatedUser.getPrenom(),AutnehticatedUser.getId(),AutnehticatedUser.getRole().getLabel());
+        User AuthenticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
+        return jwtUtils.generateToken(userDetails.getUsername(),AuthenticatedUser.getNom(),AuthenticatedUser.getPrenom(),AuthenticatedUser.getId(),AuthenticatedUser.getRole().getLabel());
     }
 
     @PostMapping("/signup")
@@ -70,10 +70,5 @@ public class AuthController {
         }
         return new ResponseEntity<>("L'utilisateur existe déjà.", HttpStatus.BAD_REQUEST);
 
-    }
-    @GetMapping("/test")
-    public String test() {
-
-        return "test";
     }
 }

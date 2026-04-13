@@ -61,7 +61,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/books/{id}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/books/search").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("LIBRARIAN")
+                                .requestMatchers(HttpMethod.PUT, "/api/books/{id}").hasRole("LIBRARIAN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/books").hasRole("ADMIN")
 
                                 .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
@@ -75,6 +75,7 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/test").hasRole("USER")
                                 .anyRequest().authenticated()
                 );
 
