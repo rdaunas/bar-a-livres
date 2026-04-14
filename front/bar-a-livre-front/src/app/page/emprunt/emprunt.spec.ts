@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageEmprunt } from './page.emprunt';
+import { PageEmprunt } from './emprunt';
 
 describe('PageEmprunt', () => {
   let component: PageEmprunt;
