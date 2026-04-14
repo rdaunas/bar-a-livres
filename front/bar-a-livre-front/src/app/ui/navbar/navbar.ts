@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AuthService } from '../../core/services/auth.service';
 
 export interface NavItem {
   label: string;
@@ -32,7 +31,6 @@ export interface NavItem {
 })
 export class Navbar {
 
-  readonly auth = inject(AuthService);
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   readonly isMobile = computed(() => {
@@ -40,36 +38,9 @@ export class Navbar {
     return window.innerWidth <= 768;
   });
 
-  // Menus selon le rôle
-  readonly navItems = computed((): NavItem[] => {
-    switch (this.auth.role()) {
-      case 'adherent':
-        return [
-          { label: 'Consulter le catalogue', route: '/catalogue', icon: 'menu_book' },
-        ];
-      case 'bibliothecaire':
-        return [
-          { label: 'Gestion des emprunts', route: '/emprunts', icon: 'assignment' },
-          { label: 'Consulter le catalogue', route: '/catalogue', icon: 'menu_book' },
-          { label: 'Ajouter un livre', route: '/livres/ajouter', icon: 'add_circle' },
-          { label: 'Statistiques', route: '/statistiques', icon: 'bar_chart' },
-        ];
-      case 'admin':
-        return [
-          { label: 'Liste des utilisateurs', route: '/utilisateurs', icon: 'group' },
-          { label: 'Statistiques', route: '/statistiques', icon: 'bar_chart' },
-        ];
-      default: // 'user' non connecté
-        return [];
-    }
-  });
 
   goBack(): void {
     window.history.back();
-  }
-
-  logout(): void {
-    this.auth.logout();
   }
 }
 

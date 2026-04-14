@@ -1,16 +1,17 @@
 import { Routes } from '@angular/router';
+import {Connexion} from './ui/connexion/connexion';
 
 export const routes: Routes = [
   { path: '',           redirectTo: 'connexion', pathMatch: 'full' },
   {
     path: 'connexion',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
   },
   {
     path: 'inscription',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/inscription/inscription').then(m => m.Inscription)
   },
   {
     path: 'catalogue',
@@ -20,31 +21,31 @@ export const routes: Routes = [
   {
     path: 'profil',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : ProfilComponent
   },
   {
     path: 'emprunts',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : EmpruntsComponent
   },
   {
     path: 'livres/ajouter',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : AjouterLivreComponent
   },
   {
     path: 'statistiques',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : StatistiquesComponent
   },
   {
     path: 'utilisateurs',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : UtilisateursComponent
   },
   { path: '**', redirectTo: 'connexion' }

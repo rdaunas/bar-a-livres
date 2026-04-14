@@ -8,13 +8,12 @@ import {Observable} from 'rxjs';
 })
 export class AuthService {
 
+  // Setup session obj in app-root with role + nom + prenom
+  // Conditional rendering nav link by session.role
+  // Auto login after signup
 
   private http = inject(HttpClient);
-  /*
-  headers: {
-          Authorization : 'Bearer ' + localStorage.getItem('token')
-        },
-   */
+
   public addToken() : HttpHeaders {
     return new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')});
   }
@@ -38,12 +37,10 @@ export class AuthService {
   public signUp(username: string, password: string, lastName: string, firstName: string) {
     try {
       this.http.post<string>('http://localhost:8080/api/v1/auth/signup', {
-        body:{
           email:username,
           password: password,
           nom: lastName,
           prenom: firstName
-        }
       }).subscribe(retour => {
         return retour;
       })
@@ -51,5 +48,10 @@ export class AuthService {
     catch (e : any) {
       return e.message()
     }
+  }
+
+  public logout() {
+    localStorage.removeItem("token");
+    //navigate to home
   }
 }
