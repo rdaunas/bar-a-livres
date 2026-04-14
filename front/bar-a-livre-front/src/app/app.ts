@@ -1,13 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { Navbar } from './ui/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatSlideToggle],
+  standalone: true,
+  imports: [Navbar, RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('bar-a-livre-front');
-}
+export class App {}

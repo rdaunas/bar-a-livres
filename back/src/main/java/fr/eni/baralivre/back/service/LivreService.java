@@ -9,25 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LivreService {
-    List<LivreDTO> findAllLivre();
-
     Page<LivreDTO> findAllLivre(int page, int size);
-
-    List<LivreDTO> findLivreByTitre(String titre);
 
     Optional<LivreDTO> findLivreByIsbn(String isbn);
 
-    Optional<LivreDTO> findLivreByAuteur(String auteur);
-
-    List<LivreDTO> findLivreByCategorie(List<Integer> categorieIds);
-
     Page<LivreDTO> search(List<Integer> categorieIds, String titre, int page, int size);
 
-    // List<Livre> findLivreByCategorieAndTitre(List<Integer> categorieIds, String titre);
+    LivreDTO ajouterLivre(LivreDTO livreDTO);
 
-    Livre ajouterLivre(Livre livre);
+    LivreDTO retirerLivre(String isbn);
 
-    Livre retirerLivre(String isbn);
-
-    Livre update(Livre livre);
+    LivreDTO update(LivreDTO livreDTO);
 }
