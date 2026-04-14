@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
+import {AuthService} from './auth-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanFetch {
+
+  private auth = inject(AuthService);
 
   public getUserLoans() {
     return fetch(`http://localhost:8080/api/users/`, {})

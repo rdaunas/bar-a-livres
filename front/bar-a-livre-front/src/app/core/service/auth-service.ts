@@ -1,12 +1,12 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class FetchService {
+export class AuthService {
 
 
   private http = inject(HttpClient);
@@ -15,17 +15,23 @@ export class FetchService {
           Authorization : 'Bearer ' + localStorage.getItem('token')
         },
    */
+  public addToken() : HttpHeaders {
+    return new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')});
+  }
+
 
   public login(username: string,password: string ) {
+    const h  = new HttpHeaders({'Access-Control-Allow-Origin': '*'});
     this.http
-      .post<string>('http://localhost:8080/api/v1/signin', {
-        body: {
-          username: username,
-          password: password
+      .post<string>('http://localhost:8080/api/v1/auth/signin', {
+          "email": username,
+          "password": password
         }
-      })
-      .subscribe((token) => {
-        return token;
+      )
+      .subscribe((response) => {
+        const token = JSON.stringify(response);
+        const o = JSON.parse(token);
+        localStorage.setItem("token", o.token);
       });
   }
 
