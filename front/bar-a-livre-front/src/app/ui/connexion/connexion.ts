@@ -30,7 +30,7 @@ import { AuthService, Role } from '../../core/services/auth.service';
     </div>
   `
 })
-export class ConnexionComponent {
+export class Connexion {
   readonly auth = inject(AuthService);
 
   roles = [

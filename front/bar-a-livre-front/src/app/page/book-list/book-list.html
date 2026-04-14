@@ -14,30 +14,48 @@
     <div class="book-list__grid">
       @for (book of books(); track book.isbn) {
         <mat-card class="book-card">
-          <mat-card-header>
-            <mat-card-title>{{ book.titre }}</mat-card-title>
-            <mat-card-subtitle>{{ book.auteur }}</mat-card-subtitle>
-          </mat-card-header>
 
-          <mat-card-content>
-            <p class="book-card__description">{{ book.description }}</p>
-            <p class="book-card__stock">
-              Total d'exemplaire(s) : {{ book.nbExemplaire }}
-            </p>
-            <p class="book-card__stock">
-              Exemplaire(s) disponible(s) : <strong>{{ book.nbExemplaire }}</strong>
-            </p>
-          </mat-card-content>
 
-          <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="goToDetail(book.isbn)">Détail</button>
-            <button
-              mat-flat-button
-              color="primary"
-              [disabled]="!canBorrow(book.isbn)">
-              Emprunter
-            </button>
-          </mat-card-actions>
+          <div class="book-card__layout">
+
+            <div class="book-card__main">
+
+              <mat-card-header>
+                <mat-card-title>{{ book.titre }}</mat-card-title>
+                <mat-card-subtitle>{{ book.auteur }}</mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-card-content class="book-card__content">
+                <p class="book-card__description">
+                  {{ book.description }}
+                </p>
+
+                <p class="book-card__stock">
+                  Total d'exemplaire(s) : {{ book.nbExemplaire }}
+                </p>
+
+                <button
+                  mat-flat-button
+                  color="primary"
+                  class="book-card__detail-btn"
+                  (click)="goToDetail(book.isbn)"
+                >
+                  Détail
+                </button>
+              </mat-card-content>
+
+            </div>
+
+            <div class="book-card__image">
+              <img
+                src="assets/book-placeholder.png"
+                alt="Couverture du livre"
+                class="book-card__cover"
+              />
+            </div>
+
+          </div>
+
         </mat-card>
       }
     </div>
