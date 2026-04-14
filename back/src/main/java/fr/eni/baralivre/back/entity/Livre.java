@@ -10,8 +10,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = "categories")
 @Builder
 
 @Entity
@@ -19,7 +19,8 @@ import java.util.Set;
 public class Livre {
 
     @Id
-    @Column(name = "isbn", nullable = false, length = 20)
+    @Column(name = "isbn", nullable = false, length = 13)
+    @EqualsAndHashCode.Include
     String isbn;
 
     @Column(name = "couverture", length = 255)
@@ -43,11 +44,12 @@ public class Livre {
     @Column(name = "is_active")
     boolean isActive;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(
             name = "livre_categorie",
             joinColumns = @JoinColumn(name = "livre_isbn"),
             inverseJoinColumns = @JoinColumn(name = "categorie_id")
     )
+
     private Set<Categorie> categories;
 }

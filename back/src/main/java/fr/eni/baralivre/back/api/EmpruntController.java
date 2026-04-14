@@ -78,4 +78,10 @@ public class EmpruntController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/books/{isbn}/available")
+    public ResponseEntity<Boolean> isAvailable(@PathVariable String isbn) {
+        return ResponseEntity.ok(empruntService.isLivreDisponible(isbn));
+    }
+
 }

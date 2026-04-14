@@ -1,0 +1,54 @@
+<div class="book-list-container">
+
+  @if (isLoading()) {
+    <div class="book-list__spinner">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    @if (books().length === 0) {
+      <p class="book-list__empty">Aucun livre disponible.</p>
+    }
+
+    <div class="book-list__grid">
+      @for (book of books(); track book.isbn) {
+        <mat-card class="book-card">
+          <mat-card-header>
+            <mat-card-title>{{ book.titre }}</mat-card-title>
+            <mat-card-subtitle>{{ book.auteur }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="book-card__description">{{ book.description }}</p>
+            <p class="book-card__stock">
+              Total d'exemplaire(s) : {{ book.nbExemplaire }}
+            </p>
+            <p class="book-card__stock">
+              Exemplaire(s) disponible(s) : <strong>{{ book.nbExemplaire }}</strong>
+            </p>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="goToDetail(book.isbn)">Détail</button>
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!canBorrow(book.isbn)">
+              Emprunter
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      aria-label="Pagination des livres">
+    </mat-paginator>
+  }
+
+</div>

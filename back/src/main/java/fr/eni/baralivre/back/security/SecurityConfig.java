@@ -13,6 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -44,10 +52,22 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(e ->
                         e.authenticationEntryPoint(unauthorizedHandler)
@@ -57,17 +77,26 @@ public class SecurityConfig {
                                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.GET, "/api/books").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/books/{id}").permitAll()
+                        auth
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/books/{isbn}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/books/search").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/books").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/books/{isbn}").hasRole("LIBRARIAN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/books/{isbn}").hasRole("ADMIN")
 
-                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
-                                .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER")
-                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").hasRole("LIBRARIAN")
+//                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
+//                                .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
+//                                .requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER")
+//                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").hasRole("LIBRARIAN")
+
+                                .requestMatchers(HttpMethod.GET,"/api/loans/my").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/loans").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/loans").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").permitAll()
 
                                 .requestMatchers(HttpMethod.POST, "/api/books/{id}/ratings").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/ratings/{id}").permitAll()
@@ -75,7 +104,7 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
-                                .anyRequest().authenticated()
+//                                .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

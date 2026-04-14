@@ -1,0 +1,111 @@
+<mat-toolbar color="primary" class="navbar">
+
+  <div class="navbar__left">
+    <button mat-icon-button (click)="goBack()" aria-label="Retour" matTooltip="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/" aria-label="Accueil" matTooltip="Accueil">
+      <mat-icon>home</mat-icon>
+    </button>
+
+    <span class="navbar__title">Bar à livres</span>
+  </div>
+
+  <span class="navbar__spacer"></span>
+
+  <nav class="navbar__menu" aria-label="Navigation principale">
+    <ul class="navbar__list">
+
+      @if (auth.role() === 'user') {
+        <li>
+          <a mat-button routerLink="/inscription" routerLinkActive="navbar__link--active">
+            <mat-icon matPrefix>person_add</mat-icon>
+            Inscription
+          </a>
+        </li>
+        <li>
+          <a mat-flat-button routerLink="/connexion" class="navbar__btn-rounded">
+            Connexion
+          </a>
+        </li>
+      }
+
+      @if (auth.role() !== 'user') {
+        @for (item of navItems(); track item.route) {
+          <li>
+            <a mat-button [routerLink]="item.route" routerLinkActive="navbar__link--active">
+              @if (item.icon) {
+                <mat-icon matPrefix>{{ item.icon }}</mat-icon>
+              }
+              {{ item.label }}
+            </a>
+          </li>
+        }
+
+        @if (auth.role() === 'adherent') {
+          <li>
+            <a mat-stroked-button routerLink="/profil" class="navbar__pseudo" matTooltip="Mon profil">
+              <mat-icon matPrefix>account_circle</mat-icon>
+              {{ auth.pseudo() }}
+            </a>
+          </li>
+        }
+
+        <li>
+          <button mat-flat-button color="warn" (click)="logout()" class="navbar__btn-rounded">
+            <mat-icon matPrefix>logout</mat-icon>
+            Déconnexion
+          </button>
+        </li>
+      }
+
+    </ul>
+  </nav>
+
+  <button mat-icon-button
+          class="navbar__hamburger"
+          [matMenuTriggerFor]="mobileMenu"
+          aria-label="Ouvrir le menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #mobileMenu="matMenu">
+
+    @if (auth.role() === 'user') {
+      <a mat-menu-item routerLink="/inscription">
+        <mat-icon>person_add</mat-icon>
+        <span>Inscription</span>
+      </a>
+      <a mat-menu-item routerLink="/connexion">
+        <mat-icon>login</mat-icon>
+        <span>Connexion</span>
+      </a>
+    }
+
+    @if (auth.role() !== 'user') {
+      @for (item of navItems(); track item.route) {
+        <a mat-menu-item [routerLink]="item.route">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+
+      @if (auth.role() === 'adherent') {
+        <mat-divider></mat-divider>
+        <a mat-menu-item routerLink="/profil">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{ auth.pseudo() }} — Profil</span>
+        </a>
+      }
+
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon color="warn">logout</mat-icon>
+        <span>Déconnexion</span>
+      </button>
+    }
+
+  </mat-menu>
+
+</mat-toolbar>
