@@ -11,11 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -46,7 +50,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public String authenticateUser(@RequestBody UserDTO user) {
+    public ResponseEntity authenticateUser(@RequestBody UserDTO user) {
         log.info("Signin attempt");
         Authentication authentication = authenticationManager.authenticate(
                 new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
@@ -56,10 +60,11 @@ public class AuthController {
         );
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        log.info(userDetails.getAuthorities().toString());
-        log.info(userDetailsServiceImpl.getUserRole(userDetails.getUsername()));
-        User AuthenticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
-        return jwtUtils.generateToken(userDetails.getUsername(),AuthenticatedUser.getNom(),AuthenticatedUser.getPrenom(),AuthenticatedUser.getId(),AuthenticatedUser.getRole().getLabel());
+        User AutnehticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
+
+        Map<String,String> payload = new HashMap<>();
+        payload.put("token",jwtUtils.generateToken(userDetails.getUsername(),AutnehticatedUser.getNom(),AutnehticatedUser.getPrenom(),AutnehticatedUser.getId(),AutnehticatedUser.getRole().getLabel()));
+        return new ResponseEntity<>(payload,HttpStatus.OK);
     }
 
     @PostMapping("/signup")
@@ -70,5 +75,10 @@ public class AuthController {
         }
         return new ResponseEntity<>("L'utilisateur existe déjà.", HttpStatus.BAD_REQUEST);
 
+    }
+    @GetMapping("/test")
+    public String test() {
+
+        return "test";
     }
 }

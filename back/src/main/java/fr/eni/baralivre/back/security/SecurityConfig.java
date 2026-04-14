@@ -16,7 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -48,7 +51,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//********************************************************************************************************
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -61,8 +63,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-    //********************************************************************************************************
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -81,7 +81,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/books/{id}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/books/search").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.PUT, "/api/books/{id}").hasRole("LIBRARIAN")
+                                .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("LIBRARIAN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/books").hasRole("ADMIN")
 
                                 .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
@@ -95,7 +95,6 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/test").hasRole("USER")
                                 .anyRequest().authenticated()
                 );
 
