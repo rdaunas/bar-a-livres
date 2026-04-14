@@ -1,0 +1,47 @@
+<div class="detail-container">
+
+  <h2 class="detail-title">Détail du livre</h2>
+
+  @if (isLoading()) {
+    <div class="detail-spinner">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (book()) {
+    <div class="detail-content">
+
+      <div class="detail-left">
+        <img src="assets/book-placeholder.png" alt="Couverture" class="detail-cover"/>
+<!--        <div class="detail-stars">-->
+<!--          @for (star of getStars(); track $index) {-->
+<!--            <span class="detail-star" [class.filled]="star">★</span>-->
+<!--          }-->
+<!--        </div>-->
+      </div>
+
+      <div class="detail-right">
+        <div class="detail-grid">
+          <p><strong>Titre :</strong> {{ book()!.titre }}</p>
+          <p><strong>Auteur :</strong> {{ book()!.auteur }}</p>
+          <p><strong>Date de mise à disposition :</strong> {{ book()!.dateAjout | date:'dd/MM/yyyy' }}</p>
+          <p><strong>Catégories :</strong> {{ book()!.categories.map(c => c.nom).join(', ') }}</p>
+        </div>
+        <p class="detail-resume">
+          <strong>Résumé :</strong> {{ book()!.description }}
+        </p>
+      </div>
+
+    </div>
+
+    <div class="detail-actions">
+      <button mat-flat-button (click)="emprunter()" [@If]="canBorrow()">EMPRUNTER</button>
+      <button mat-flat-button (click)="reserver()">RÉSERVER LE LIVRE</button>
+      <button mat-stroked-button color="warn" (click)="annulerReservation()">ANNULER RÉSERVATION</button>
+    </div>
+
+  } @else if (!isLoading()) {
+    <p class="detail-empty">Livre introuvable.</p>
+  }
+
+</div>

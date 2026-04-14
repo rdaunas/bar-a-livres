@@ -77,12 +77,16 @@ public class SecurityConfig {
                                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.GET, "/api/books").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/books/{id}").permitAll()
+                        auth
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/books/{isbn}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/books/search").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.PUT, "/api/books").hasRole("LIBRARIAN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/books").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/books/{isbn}").hasRole("LIBRARIAN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/books/{isbn}").hasRole("ADMIN")
 
                                 .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
                                 .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
@@ -95,7 +99,7 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
-                                .anyRequest().authenticated()
+//                                .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

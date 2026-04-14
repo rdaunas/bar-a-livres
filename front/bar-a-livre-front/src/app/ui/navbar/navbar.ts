@@ -36,11 +36,9 @@ export class Navbar {
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   readonly isMobile = computed(() => {
-    // Réactivité mobile via signal-like pattern (breakpoint)
     return window.innerWidth <= 768;
   });
 
-  // Menus selon le rôle
   readonly navItems = computed((): NavItem[] => {
     switch (this.auth.role()) {
       case 'adherent':

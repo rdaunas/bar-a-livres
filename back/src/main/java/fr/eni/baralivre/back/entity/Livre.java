@@ -19,7 +19,7 @@ import java.util.Set;
 public class Livre {
 
     @Id
-    @Column(name = "isbn", nullable = false, length = 20)
+    @Column(name = "isbn", nullable = false, length = 13)
     @EqualsAndHashCode.Include
     String isbn;
 

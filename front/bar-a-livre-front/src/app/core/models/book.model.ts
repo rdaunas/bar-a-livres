@@ -4,10 +4,10 @@ export interface LivreDTO {
   auteur: string;
   description: string;
   couverture: string;
-  nbExemplaires: number;
+  nbExemplaire: number;
   dateAjout: string;
   isActive: boolean;
-  categories: string[];
+  categories: { id: number; nom: string }[];
 }
 
 export interface PageResponse<T> {

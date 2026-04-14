@@ -1,6 +1,5 @@
 <mat-toolbar color="primary" class="navbar">
 
-  <!-- ── Gauche : Retour + Home + Titre ── -->
   <div class="navbar__left">
     <button mat-icon-button (click)="goBack()" aria-label="Retour" matTooltip="Retour">
       <mat-icon>arrow_back</mat-icon>
@@ -15,11 +14,9 @@
 
   <span class="navbar__spacer"></span>
 
-  <!-- ── Desktop : menu ul/li ── -->
   <nav class="navbar__menu" aria-label="Navigation principale">
     <ul class="navbar__list">
 
-      <!-- Rôle user : non connecté -->
       @if (auth.role() === 'user') {
         <li>
           <a mat-button routerLink="/inscription" routerLinkActive="navbar__link--active">
@@ -34,7 +31,6 @@
         </li>
       }
 
-      <!-- Rôles connectés : items dynamiques -->
       @if (auth.role() !== 'user') {
         @for (item of navItems(); track item.route) {
           <li>
@@ -47,7 +43,6 @@
           </li>
         }
 
-        <!-- Pseudo adhérent → profil -->
         @if (auth.role() === 'adherent') {
           <li>
             <a mat-stroked-button routerLink="/profil" class="navbar__pseudo" matTooltip="Mon profil">
@@ -57,7 +52,6 @@
           </li>
         }
 
-        <!-- Déconnexion -->
         <li>
           <button mat-flat-button color="warn" (click)="logout()" class="navbar__btn-rounded">
             <mat-icon matPrefix>logout</mat-icon>
@@ -69,7 +63,6 @@
     </ul>
   </nav>
 
-  <!-- ── Mobile : hamburger ── -->
   <button mat-icon-button
           class="navbar__hamburger"
           [matMenuTriggerFor]="mobileMenu"
@@ -77,7 +70,6 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <!-- Menu mobile -->
   <mat-menu #mobileMenu="matMenu">
 
     @if (auth.role() === 'user') {

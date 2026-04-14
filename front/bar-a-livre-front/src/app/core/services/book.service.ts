@@ -9,7 +9,7 @@ import { LivreDTO, PageResponse } from '../models/book.model';
 export class BookService {
 
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/books';
+  private readonly apiUrl = 'http://localhost:8080/api/books';
 
   findAll(page: number = 0, size: number = 20): Observable<PageResponse<LivreDTO>> {
     const params = new HttpParams()
@@ -17,5 +17,13 @@ export class BookService {
       .set('size', size);
 
     return this.http.get<PageResponse<LivreDTO>>(this.apiUrl, { params });
+  }
+
+  findByIsbn(isbn: string): Observable<LivreDTO> {
+    return this.http.get<LivreDTO>(`${this.apiUrl}/${isbn}`);
+  }
+
+  isAvailable(isbn: string) {
+    return this.http.get<boolean>(`/api/books/${isbn}/available`);
   }
 }

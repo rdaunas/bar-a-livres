@@ -18,6 +18,11 @@ export const routes: Routes = [
       import('./page/book-list/book-list').then(m => m.BookList)
   },
   {
+    path: 'catalogue/:isbn',
+    loadComponent: () =>
+      import('./page/book-detail/book-detail').then(m => m.BookDetail)
+  },
+  {
     path: 'profil',
     loadComponent: () =>
       import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
