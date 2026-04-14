@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConnexionComponent } from './connexion';
+import { TableauEmprunts } from './tableau.emprunts';
 
-describe('Connexion', () => {
-  let component: ConnexionComponent;
-  let fixture: ComponentFixture<ConnexionComponent>;
+describe('TableauEmprunts', () => {
+  let component: TableauEmprunts;
+  let fixture: ComponentFixture<TableauEmprunts>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConnexionComponent],
+      imports: [TableauEmprunts],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConnexionComponent);
+    fixture = TestBed.createComponent(TableauEmprunts);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

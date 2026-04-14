@@ -1,5 +1,6 @@
 package fr.eni.baralivre.back.service;
 
+import fr.eni.baralivre.back.dto.LivreDTO;
 import fr.eni.baralivre.back.entity.Emprunt;
 import fr.eni.baralivre.back.entity.Livre;
 import fr.eni.baralivre.back.entity.Status;
@@ -8,17 +9,21 @@ import fr.eni.baralivre.back.repository.LivreRepository;
 import fr.eni.baralivre.back.repository.StatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class EmpruntServiceImpl implements EmpruntService {
 
     private EmpruntRepository empruntRepository;
     private StatusRepository statusRepository;
+    private LivreService livreService;
+
 
     @Autowired
     public LivreRepository livreRepository;
@@ -26,12 +31,14 @@ public class EmpruntServiceImpl implements EmpruntService {
     @Override
     public Emprunt chargerUnEmprunt(int id) {
         if (id <= 0) {
+            log.error("id invalide");
             throw new RuntimeException("id invalide");
         }
         final List<Emprunt> emprunt = empruntRepository.findEmpruntById(id);
         if (!emprunt.isEmpty()) {
             return emprunt.getFirst();
         }
+        log.error("emprunt not found");
         throw new RuntimeException("emprunt not found");
     }
 
@@ -43,6 +50,7 @@ public class EmpruntServiceImpl implements EmpruntService {
     @Override
     public List<Emprunt> chargerToutLesEmpruntParUserId(Integer userId) {
         if(userId == null){
+            log.error("Utilisateur inconnu");
             throw new RuntimeException("Utilisateur inconnu");
         }
         return empruntRepository.findEmpruntByUserId(userId);
@@ -51,6 +59,7 @@ public class EmpruntServiceImpl implements EmpruntService {
     @Override
     public List<Emprunt> chargerLesStatusDesEmpruntParUserId(Integer userID) {
         if (userID == null){
+            log.error("Utilisateur inconnu");
             throw new RuntimeException("Utilisateur inconnu");
         }
 
@@ -58,26 +67,44 @@ public class EmpruntServiceImpl implements EmpruntService {
     }
 
     @Override
+    public List<Emprunt> chargerLesStatusDesEmpruntParIsbn(String livreIsbn) {
+        if (livreIsbn == null){
+            log.error("ISBN du livre invalide");
+            throw new RuntimeException("ISBN du livre invalide");
+        }
+        return empruntRepository.findEmpruntByLivreIsbnAndStatus_TypeStatus(livreIsbn, "En cours");
+    }
+
+    @Override
     public Emprunt creerEmprunt(Integer userId, String livreIsbn) {
         if (userId == null){
+            log.error("Utilisateur inconnu");
             throw new RuntimeException("Utilisateur inconnu");
         }
         if (livreIsbn == null){
+            log.error("ISBN du livre invalide");
             throw new RuntimeException("ISBN du livre invalide");
         }
+
         List<Emprunt> empruntsEnCours = empruntRepository.findEmpruntByUserIdAndStatus_TypeStatus(userId, "En cours");
         if(empruntsEnCours.size() >=3){
+            log.error("Vous avez atteint le nombre maximum d'emprunts");
             throw new RuntimeException("Vous avez atteint le nombre maximum d'emprunts");
         }
         List<Emprunt> emprunts = chargerLesStatusDesEmpruntParUserId(userId);
         for (Emprunt emprunt : emprunts) {
             if (LocalDateTime.now().isAfter(emprunt.getDateRetourPrevisionnel())) {
+                log.error("Vous avez des emprunts en retard");
                 throw new RuntimeException("Vous avez des emprunts en retard");
             }
         }
-
-        // TODO : Vérifier que le livre existe et est disponible
-        // TODO : Décrémenter le nombre d'exemplaires disponibles
+        LivreDTO exemplaires = livreService.findLivreByIsbn(livreIsbn).orElseThrow();
+        int nbExmplaires = exemplaires.getNbExemplaire();
+        int nbExemplairesDispo = nbExmplaires - empruntRepository.findEmpruntByLivreIsbnAndStatus_TypeStatus(livreIsbn, "En cours").size();
+        if (nbExemplairesDispo <= 0){
+            log.error("Le livre n'est plus disponible");
+            throw new RuntimeException("Le livre n'est plus disponible");
+        }
 
         final LocalDateTime todayDate = LocalDateTime.now();
         Status statusEmprunt = statusRepository.findByTypeStatus("En cours").orElseThrow(() -> new RuntimeException("Statut 'En cours' non trouvé"));
@@ -95,17 +122,18 @@ public class EmpruntServiceImpl implements EmpruntService {
     @Override
     public Emprunt retournerEmprunt(int empruntId) {
         if (empruntId <= 0){
+            log.error("id d'emprunt invalide");
             throw new RuntimeException("id d'emprunt invalide");
         }
         Emprunt emprunt = chargerUnEmprunt(empruntId);
 
         if(!emprunt.getStatus().getTypeStatus().equals("En cours")){
+            log.error("Emprunt non en cours");
             throw new RuntimeException("Emprunt non en cours");
         }
     Status statusRetourne = statusRepository.findByTypeStatus("Terminé").orElseThrow(() -> new RuntimeException("Status de retour non trouvé"));
     emprunt.setStatus(statusRetourne);
 
-        // TODO : Incrémenter le nombre d'exemplaires disponibles du livre
         return empruntRepository.save(emprunt);
     }
 

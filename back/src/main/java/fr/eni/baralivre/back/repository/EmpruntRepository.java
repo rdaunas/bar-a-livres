@@ -23,6 +23,8 @@ public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
 
     List<Emprunt> findEmpruntByUserIdAndStatus_TypeStatus(Integer userId, String statusTypeStatus);
 
+    List<Emprunt> findEmpruntByLivreIsbnAndStatus_TypeStatus(String livreIsbn, String statusTypeStatus);
+
     @Query("SELECT COUNT(e) FROM Emprunt e WHERE e.livreIsbn = :isbn AND e.status.typeStatus = 'En cours'")
     long countActiveEmpruntsByIsbn(String isbn);
 }
