@@ -1,10 +1,9 @@
 export interface EmpruntModel {
 
   userId: bigint;
-  isbn: string;
-  status: string;
+  livreIsbn: string;
+  typeStatus: string;
   dateDemande: Date;
   dateEmprunt: Date;
   dateRetourPrevisionnel: Date;
-
 }

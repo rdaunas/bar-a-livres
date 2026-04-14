@@ -1,5 +1,6 @@
 package fr.eni.baralivre.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import lombok.*;
 @Entity
 @Builder
 @Table(name = "statut")
+@JsonIncludeProperties({"typeStatus"})
 public class Status {
 
     @Id
