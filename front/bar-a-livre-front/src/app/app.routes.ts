@@ -26,8 +26,7 @@ export const routes: Routes = [
   {
     path: 'emprunts',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
-    // TODO Remplacer par : EmpruntsComponent
+      import('./page/emprunt/emprunt').then(m => m.PageEmprunt)
   },
   {
     path: 'livres/ajouter',
