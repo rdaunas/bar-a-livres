@@ -23,6 +23,11 @@ export class PageEmprunt implements OnInit{
   ngOnInit(): void {
     this.loadEmprunts()
   }
+  retournerLivre(id: number): void {
+    this.emprunts.retournerLivre(id).subscribe({
+      next: () => {}
+    })
+  }
 
   loadEmprunts(): void {
     this.isLoading.set(true);
@@ -30,6 +35,7 @@ export class PageEmprunt implements OnInit{
     this.emprunts.findAll(this.pageIndex, this.pageSize).subscribe({
       next: (page) => {
         const data = page.map(e => ({
+          id: e.id,
           userId: e.userId,
           livreIsbn: e.livreIsbn,
           typeStatus: e.typeStatus,

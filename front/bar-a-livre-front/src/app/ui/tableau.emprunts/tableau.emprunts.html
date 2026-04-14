@@ -40,10 +40,9 @@
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef> Action </th>
     <td mat-cell *matCellDef="let element">
-      <section>
-        <div class="example-button-row">
-          <button matButton="outlined">Basic</button>
-        </div>
+      <section class="button-row">
+        <button matButton="outlined" (click)="onValider(element)">Valider le retour</button>
+        <button matButton="outlined">Annuler la réservation</button>
       </section>
     </td>
   </ng-container>

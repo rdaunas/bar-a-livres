@@ -15,4 +15,7 @@ export class EmpruntService {
 
     return this.http.get<EmpruntModel[]>(this.apiUrl);
   }
+  retournerLivre(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/return`, null);
+  }
 }
