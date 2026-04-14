@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import {
   MatCard,
   MatCardActions,
@@ -15,6 +14,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BookService } from '../../core/services/book.service';
 import { LivreDTO } from '../../core/models/book.model';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
@@ -31,6 +31,7 @@ import { LivreDTO } from '../../core/models/book.model';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatSnackBarModule,
+    RouterLink,
   ],
   templateUrl: './book-list.html',
   styleUrl: './book-list.css',
@@ -38,15 +39,18 @@ import { LivreDTO } from '../../core/models/book.model';
 })
 export class BookList implements OnInit {
 
-  private readonly livreService = inject(BookService);
+  private readonly bookService = inject(BookService);
   private readonly snackBar = inject(MatSnackBar);
 
-  readonly livres = signal<LivreDTO[]>([]);
+  readonly books = signal<LivreDTO[]>([]);
   readonly isLoading = signal(false);
   readonly totalElements = signal(0);
+  readonly availabilityMap = signal<Record<string, boolean>>({});
 
   pageIndex = 0;
   pageSize = 20;
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadLivres();
@@ -55,11 +59,15 @@ export class BookList implements OnInit {
   loadLivres(): void {
     this.isLoading.set(true);
 
-    this.livreService.findAll(this.pageIndex, this.pageSize).subscribe({
+    this.bookService.findAll(this.pageIndex, this.pageSize).subscribe({
       next: (page) => {
-        this.livres.set(page.content);
+        this.books.set(page.content);
         this.totalElements.set(page.totalElements);
         this.isLoading.set(false);
+
+        page.content.forEach(book => {
+          this.checkAvailability(book.isbn);
+        });
       },
       error: () => {
         this.snackBar.open('Erreur lors du chargement des livres.', 'Fermer', { duration: 3000 });
@@ -73,4 +81,24 @@ export class BookList implements OnInit {
     this.pageSize = event.pageSize;
     this.loadLivres();
   }
+
+  goToDetail(isbn: string) {
+    this.router.navigate(['/catalogue', isbn]);
+  }
+
+  checkAvailability(isbn: string) {
+    this.bookService.isAvailable(isbn).subscribe(res => {
+      this.availabilityMap.update(map => ({
+        ...map,
+        [isbn]: res
+      }));
+
+      console.log(isbn, 'available:', res);
+    });
+  }
+
+  canBorrow(isbn: string): boolean {
+    return this.availabilityMap()[isbn] ?? false;
+  }
+
 }

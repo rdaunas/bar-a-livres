@@ -1,10 +1,13 @@
 package fr.eni.baralivre.back.service;
 
 import fr.eni.baralivre.back.entity.Emprunt;
+import fr.eni.baralivre.back.entity.Livre;
 import fr.eni.baralivre.back.entity.Status;
 import fr.eni.baralivre.back.repository.EmpruntRepository;
+import fr.eni.baralivre.back.repository.LivreRepository;
 import fr.eni.baralivre.back.repository.StatusRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,9 @@ public class EmpruntServiceImpl implements EmpruntService {
 
     private EmpruntRepository empruntRepository;
     private StatusRepository statusRepository;
+
+    @Autowired
+    public LivreRepository livreRepository;
 
     @Override
     public Emprunt chargerUnEmprunt(int id) {
@@ -101,6 +107,16 @@ public class EmpruntServiceImpl implements EmpruntService {
 
         // TODO : Incrémenter le nombre d'exemplaires disponibles du livre
         return empruntRepository.save(emprunt);
+    }
+
+    public boolean isLivreDisponible(String isbn) {
+
+        Livre livre = livreRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Livre introuvable"));
+
+        long empruntsActifs = empruntRepository.countActiveEmpruntsByIsbn(isbn);
+
+        return livre.getNbExemplaire() > empruntsActifs;
     }
 
 }

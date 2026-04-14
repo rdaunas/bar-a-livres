@@ -18,4 +18,6 @@ public interface EmpruntService {
 
     Emprunt retournerEmprunt(int empruntId);
 
+    boolean isLivreDisponible(String isbn);
+
 }
