@@ -33,7 +33,7 @@ export class PageEmprunt implements OnInit{
           duration: 3000,
           panelClass: ['snackbar-success']
         });
-        location.reload();
+        this.loadEmprunts();
       }
     })
   }
