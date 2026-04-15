@@ -38,8 +38,9 @@
           formControlName="password"
           required
         />
+        <mat-hint >min 12 caractères dont une minuscule, une majuscule un chiffre et un caractère spécial</mat-hint>
       </mat-form-field>
-      <button matButton="filled" type="submit" [disabled]="!signupForm.valid">S'inscrire</button>
+      <button matButton="filled" type="submit" [disabled]="!signupForm.valid" class="my-10">S'inscrire</button>
     </div>
   </form>
 </div>

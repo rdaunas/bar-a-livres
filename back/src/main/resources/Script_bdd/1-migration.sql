@@ -1,82 +1,198 @@
+INSERT INTO role (label) VALUES
+    ('USER'),
+    ('LIBRARIAN'),
+    ('ADMIN');
+
 INSERT INTO categorie (nom) VALUES
-('Roman'),
-('Science-Fiction'),
-('Fantasy'),
-('Policier'),
-('Thriller'),
-('Développement personnel'),
-('Histoire'),
-('Biographie'),
-('Informatique'),
-('Jeunesse');
+    ('Roman'),
+    ('Science-Fiction'),
+    ('Fantasy'),
+    ('Policier'),
+    ('Thriller'),
+    ('Développement personnel'),
+    ('Histoire'),
+    ('Biographie'),
+    ('Informatique'),
+    ('Jeunesse');
 
-INSERT INTO livre (isbn, couverture, titre, auteur, description, nb_exemplaires, date_ajout, is_active, categorie_id) VALUES
--- Romans
-('ISBN001', 'cover1.jpg', 'Le souffle des mots', 'Jean Dupont', 'Un roman poignant', 5, GETDATE(), 1, 1),
-('ISBN002', 'cover2.jpg', 'L''ombre du vent', 'Carlos Ruiz Zafón', 'Mystère et littérature', 3, GETDATE(), 1, 1),
-('ISBN003', 'cover3.jpg', 'Les jours heureux', 'Claire Martin', 'Une histoire touchante', 4, GETDATE(), 1, 1),
-('ISBN004', 'cover4.jpg', 'Amour et destin', 'Sophie Laurent', 'Romance moderne', 6, GETDATE(), 1, 1),
-('ISBN005', 'cover5.jpg', 'La vie en pause', 'Marc Petit', 'Réflexion sur la vie', 2, GETDATE(), 1, 1),
+INSERT INTO statut (nom) VALUES
+    ('En attente'),
+    ('En cours'),
+    ('Terminé'),
+    ('Annulé');
 
--- Science-Fiction
-('ISBN006', 'cover6.jpg', 'Galaxie perdue', 'Isaac Nova', 'Voyage spatial', 7, GETDATE(), 1, 2),
-('ISBN007', 'cover7.jpg', 'Planète rouge', 'Elon Mars', 'Colonisation de Mars', 5, GETDATE(), 1, 2),
-('ISBN008', 'cover8.jpg', 'Cyber monde', 'Neo Smith', 'Futur numérique', 6, GETDATE(), 1, 2),
-('ISBN009', 'cover9.jpg', 'IA 2099', 'Alan Turing Jr', 'Intelligence artificielle', 3, GETDATE(), 1, 2),
-('ISBN010', 'cover10.jpg', 'Les étoiles noires', 'Luna Sky', 'Exploration spatiale', 4, GETDATE(), 1, 2),
+INSERT INTO users (nom, prenom, email, password, role_id) VALUES
+    ('Dupont', 'Alice', 'alice@mail.com', 'pass123', 1),
+    ('Martin', 'Lucas', 'lucas@mail.com', 'pass123', 1),
+    ('Bernard', 'Emma', 'emma@mail.com', 'pass123', 1),
+    ('Durand', 'Paul', 'paul@mail.com', 'pass123', 2),
+    ('Petit', 'Sophie', 'sophie@mail.com', 'pass123', 2),
+    ('Robert', 'Julien', 'julien@mail.com', 'pass123', 3),
+    ('Richard', 'Nina', 'nina@mail.com', 'pass123', 1),
+    ('Moreau', 'Leo', 'leo@mail.com', 'pass123', 1),
+    ('Simon', 'Chloé', 'chloe@mail.com', 'pass123', 1),
+    ('Laurent', 'Hugo', 'hugo@mail.com', 'pass123', 1);
 
--- Fantasy
-('ISBN011', 'cover11.jpg', 'Le royaume oublié', 'J.R.R. Martin', 'Monde fantastique', 8, GETDATE(), 1, 3),
-('ISBN012', 'cover12.jpg', 'Dragons et légendes', 'Anne Dragon', 'Créatures mythiques', 5, GETDATE(), 1, 3),
-('ISBN013', 'cover13.jpg', 'L''épée sacrée', 'Arthur King', 'Quête héroïque', 6, GETDATE(), 1, 3),
-('ISBN014', 'cover14.jpg', 'Magie noire', 'Sabrina Witch', 'Pouvoirs occultes', 4, GETDATE(), 1, 3),
-('ISBN015', 'cover15.jpg', 'Le dernier mage', 'Gandalf Grey', 'Fin d''une ère', 3, GETDATE(), 1, 3),
+INSERT INTO livre (isbn, couverture, titre, auteur, description, nb_exemplaires, date_ajout, is_active) VALUES
+('9780007117116','https://covers.openlibrary.org/b/isbn/9780007117116-L.jpg','Eragon','Christopher Paolini','Dragon et magie',1,'2025-01-10',1),
+('9780061120084','https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg','American Gods','Neil Gaiman','Fantasy moderne',2,'2025-01-10',1),
+('9780062073488','https://covers.openlibrary.org/b/isbn/9780062073488-L.jpg','And Then There Were None','Agatha Christie','Mystère',1,'2025-01-10',1),
+('9780064404990','https://covers.openlibrary.org/b/isbn/9780064404990-L.jpg','Chroniques de Narnia','C.S. Lewis','Fantasy jeunesse',1,'2025-01-10',1),
+('9780131103627','https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg','The C Programming Language','Kernighan & Ritchie','Langage C',1,'2025-01-10',1),
+('9780132350884','https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg','Clean Architecture','Robert C. Martin','Architecture logicielle',2,'2025-01-10',1),
+('9780140449136','https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg','Germinal','Émile Zola','Roman social',1,'2025-01-10',1),
+('9780307743657','https://covers.openlibrary.org/b/isbn/9780307743657-L.jpg','The Shining','Stephen King','Horreur psychologique',2,'2025-01-10',1),
+('9780345339683','https://covers.openlibrary.org/b/isbn/9780345339683-L.jpg','Le Hobbit','J.R.R. Tolkien','Fantasy épique',1,'2025-01-10',1),
+('9780553293357','https://covers.openlibrary.org/b/isbn/9780553293357-L.jpg','Ender’s Game','Orson Scott Card','SF militaire',1,'2025-01-10',1),
+('9780553573404','https://covers.openlibrary.org/b/isbn/9780553573404-L.jpg','A Game of Thrones','George R.R. Martin','Fantasy politique',1,'2025-01-10',1),
+('9780747532743','https://covers.openlibrary.org/b/isbn/9780747532743-L.jpg','Harry Potter à l’école des sorciers','J.K. Rowling','Magie et aventure',2,'2025-01-10',1),
+('9781491957660','https://covers.openlibrary.org/b/isbn/9781491957660-L.jpg','Python Crash Course','Eric Matthes','Python',2,'2025-01-10',1),
+('9781492051138','https://covers.openlibrary.org/b/isbn/9781492051138-L.jpg','Learning JavaScript','Ethan Brown','JavaScript',1,'2025-01-10',1),
+('9782020251554','https://covers.openlibrary.org/b/isbn/9782020251554-L.jpg','Les origines des espèces','Charles Darwin','Évolution',1,'2025-01-10',1),
+('9782021086834','https://covers.openlibrary.org/b/isbn/9782021086834-L.jpg','Nelson Mandela','Nelson Mandela','Autobiographie',1,'2025-01-10',1),
+('9782070360024','https://covers.openlibrary.org/b/isbn/9782070360024-L.jpg','Madame Bovary','Gustave Flaubert','Roman réaliste',2,'2025-01-10',1),
+('9782070368228','https://covers.openlibrary.org/b/isbn/9782070368228-L.jpg','L’Étranger','Albert Camus','Roman existentiel',1,'2025-01-10',1),
+('9782070396337','https://covers.openlibrary.org/b/isbn/9782070396337-L.jpg','Seconde Guerre mondiale','Winston Churchill','Guerre mondiale',2,'2025-01-10',1),
+('9782070408504','https://covers.openlibrary.org/b/isbn/9782070408504-L.jpg','Le Crime de l’Orient-Express','Agatha Christie','Enquête policière',1,'2025-01-10',1),
+('9782070412136','https://covers.openlibrary.org/b/isbn/9782070412136-L.jpg','Le Journal d’Anne Frank','Anne Frank','Témoignage',2,'2025-01-10',1),
+('9782070413119','https://covers.openlibrary.org/b/isbn/9782070413119-L.jpg','Le Rouge et le Noir','Stendhal','Roman psychologique',1,'2025-01-10',1),
+('9782070415747','https://covers.openlibrary.org/b/isbn/9782070415747-L.jpg','Fondation','Isaac Asimov','Empire galactique',1,'2025-01-10',1),
+('9782070421053','https://covers.openlibrary.org/b/isbn/9782070421053-L.jpg','Maigret tend un piège','Georges Simenon','Policier classique',2,'2025-01-10',1),
+('9782070452439','https://covers.openlibrary.org/b/isbn/9782070452439-L.jpg','Sapiens','Yuval Noah Harari','Histoire de l’humanité',1,'2025-01-10',1),
+('9782070543696','https://covers.openlibrary.org/b/isbn/9782070543696-L.jpg','Le Livre de la jungle','Rudyard Kipling','Aventure',1,'2025-01-10',1),
+('9782070612361','https://covers.openlibrary.org/b/isbn/9782070612361-L.jpg','Matilda','Roald Dahl','Jeunesse',1,'2025-01-10',1),
+('9782070612750','https://covers.openlibrary.org/b/isbn/9782070612750-L.jpg','Le Petit Prince','Antoine de Saint-Exupéry','Conte philosophique',1,'2025-01-10',1),
+('9782070615369','https://covers.openlibrary.org/b/isbn/9782070615369-L.jpg','Le Seigneur des Anneaux','J.R.R. Tolkien','Fantasy épique',2,'2025-01-10',1),
+('9782070643020','https://covers.openlibrary.org/b/isbn/9782070643020-L.jpg','Le Petit Nicolas','René Goscinny','Humour',1,'2025-01-10',1),
+('9782081275680','https://covers.openlibrary.org/b/isbn/9782081275680-L.jpg','Napoléon','Max Gallo','Biographie historique',1,'2025-01-10',1),
+('9782212673290','https://covers.openlibrary.org/b/isbn/9782212673290-L.jpg','Clean Code','Robert C. Martin','Programmation',2,'2025-01-10',1),
+('9782253004226','https://covers.openlibrary.org/b/isbn/9782253004226-L.jpg','Les Misérables','Victor Hugo','Roman classique',2,'2025-01-10',1),
+('9782253057623','https://covers.openlibrary.org/b/isbn/9782253057623-L.jpg','Steve Jobs','Walter Isaacson','Biographie entrepreneur',1,'2025-01-10',1),
+('9782253087316','https://covers.openlibrary.org/b/isbn/9782253087316-L.jpg','Einstein','Walter Isaacson','Physicien',1,'2025-01-10',1),
+('9782253096344','https://covers.openlibrary.org/b/isbn/9782253096344-L.jpg','Le Silence des agneaux','Thomas Harris','Thriller criminel',2,'2025-01-10',1),
+('9782253101451','https://covers.openlibrary.org/b/isbn/9782253101451-L.jpg','Dune','Frank Herbert','Science-fiction culte',1,'2025-01-10',1),
+('9782253112174','https://covers.openlibrary.org/b/isbn/9782253112174-L.jpg','Misery','Stephen King','Thriller huis clos',1,'2025-01-10',1),
+('9782253160304','https://covers.openlibrary.org/b/isbn/9782253160304-L.jpg','Le Nom de la Rose','Umberto Eco','Enquête médiévale',1,'2025-01-10',1),
+('9782253177000','https://covers.openlibrary.org/b/isbn/9782253177000-L.jpg','Elon Musk','Ashlee Vance','Technologie',1,'2025-01-10',1),
+('9782253238824','https://covers.openlibrary.org/b/isbn/9782253238824-L.jpg','Pouvoir du moment présent','Eckhart Tolle','Spiritualité',2,'2025-01-10',1),
+('9782262070333','https://covers.openlibrary.org/b/isbn/9782262070333-L.jpg','Histoire de France','Jules Michelet','Histoire nationale',2,'2025-01-10',1),
+('9782266093264','https://covers.openlibrary.org/b/isbn/9782266093264-L.jpg','Shutter Island','Dennis Lehane','Thriller psychologique',2,'2025-01-10',1),
+('9782266152602','https://covers.openlibrary.org/b/isbn/9782266152602-L.jpg','Da Vinci Code','Dan Brown','Thriller ésotérique',2,'2025-01-10',1),
+('9782266201959','https://covers.openlibrary.org/b/isbn/9782266201959-L.jpg','Anges et Démons','Dan Brown','Thriller religieux',2,'2025-01-10',1),
+('9782266282378','https://covers.openlibrary.org/b/isbn/9782266282378-L.jpg','1984','George Orwell','Dystopie',2,'2025-01-10',1),
+('9782290135285','https://covers.openlibrary.org/b/isbn/9782290135285-L.jpg','Le Secret','Rhonda Byrne','Loi de l’attraction',2,'2025-01-10',1),
+('9782290140968','https://covers.openlibrary.org/b/isbn/9782290140968-L.jpg','L’art subtil de s’en foutre','Mark Manson','Développement personnel',1,'2025-01-10',1),
+('9782290159755','https://covers.openlibrary.org/b/isbn/9782290159755-L.jpg','Les 4 accords toltèques','Don Miguel Ruiz','Sagesse personnelle',1,'2025-01-10',1),
+('9782813218730','https://covers.openlibrary.org/b/isbn/9782813218730-L.jpg','Atomic Habits','James Clear','Habitudes',2,'2025-01-10',1);
 
--- Policier
-('ISBN016', 'cover16.jpg', 'Enquête à Paris', 'Michel Blanc', 'Crime mystérieux', 6, GETDATE(), 1, 4),
-('ISBN017', 'cover17.jpg', 'Le suspect parfait', 'Julie Noir', 'Suspense total', 5, GETDATE(), 1, 4),
-('ISBN018', 'cover18.jpg', 'Crime en silence', 'Paul Verne', 'Enquête sombre', 4, GETDATE(), 1, 4),
-('ISBN019', 'cover19.jpg', 'Dossier classé', 'Agent X', 'Affaire secrète', 7, GETDATE(), 1, 4),
-('ISBN020', 'cover20.jpg', 'La dernière preuve', 'Clara Justice', 'Vérité cachée', 3, GETDATE(), 1, 4),
+-- =====================
+-- LIVRE_CATEGORIE (MANY TO MANY)
+-- =====================
 
--- Thriller
-('ISBN021', 'cover21.jpg', 'Course contre la mort', 'Tom Rush', 'Action intense', 6, GETDATE(), 1, 5),
-('ISBN022', 'cover22.jpg', 'Danger immédiat', 'Jack Ryan', 'Menace mondiale', 5, GETDATE(), 1, 5),
-('ISBN023', 'cover23.jpg', 'Le code secret', 'Dan Brown Jr', 'Mystère religieux', 4, GETDATE(), 1, 5),
-('ISBN024', 'cover24.jpg', 'Mission fatale', 'Ethan Hunt', 'Espionnage', 6, GETDATE(), 1, 5),
-('ISBN025', 'cover25.jpg', 'Traque nocturne', 'Night Hunter', 'Chasse à l''homme', 3, GETDATE(), 1, 5),
+INSERT INTO livre_categorie (livre_isbn, categorie_id) VALUES
 
--- Développement personnel
-('ISBN026', 'cover26.jpg', 'Réussir sa vie', 'Anthony Success', 'Motivation', 10, GETDATE(), 1, 6),
-('ISBN027', 'cover27.jpg', 'Confiance en soi', 'Marie Forte', 'Développement personnel', 8, GETDATE(), 1, 6),
-('ISBN028', 'cover28.jpg', 'Objectifs atteints', 'Goal Master', 'Atteindre ses rêves', 7, GETDATE(), 1, 6),
-('ISBN029', 'cover29.jpg', 'Changer ses habitudes', 'Habit Guru', 'Transformation', 6, GETDATE(), 1, 6),
-('ISBN030', 'cover30.jpg', 'Mindset gagnant', 'Winner Mind', 'Psychologie du succès', 9, GETDATE(), 1, 6),
+-- =====================
+-- ROMAN (categorie_id = 1)
+-- =====================
+('9782070368228', 1),
+('9782253004226', 1),
+('9780140449136', 1),
+('9782070413119', 1),
+('9782070360024', 1),
 
--- Histoire
-('ISBN031', 'cover31.jpg', 'La guerre mondiale', 'Historien Pro', 'WW2', 5, GETDATE(), 1, 7),
-('ISBN032', 'cover32.jpg', 'Empire romain', 'Jules Historicus', 'Rome antique', 4, GETDATE(), 1, 7),
-('ISBN033', 'cover33.jpg', 'Révolution française', 'Napoléon Expert', '1789', 6, GETDATE(), 1, 7),
-('ISBN034', 'cover34.jpg', 'Égypte ancienne', 'Pharaon King', 'Civilisation antique', 3, GETDATE(), 1, 7),
-('ISBN035', 'cover35.jpg', 'Moyen Âge', 'Knight Writer', 'Période médiévale', 5, GETDATE(), 1, 7),
+-- =====================
+-- SCIENCE-FICTION (categorie_id = 2)
+-- =====================
+('9782253101451', 2),
+('9782070415747', 2),
+('9782266282378', 2),
+('9780345339683', 2),
+('9780553293357', 2),
 
--- Biographie
-('ISBN036', 'cover36.jpg', 'Steve Jobs', 'Walter Isaacson', 'Vie d''un génie', 4, GETDATE(), 1, 8),
-('ISBN037', 'cover37.jpg', 'Elon Musk', 'Ashlee Vance', 'Visionnaire', 5, GETDATE(), 1, 8),
-('ISBN038', 'cover38.jpg', 'Napoléon', 'Historien X', 'Empereur', 3, GETDATE(), 1, 8),
-('ISBN039', 'cover39.jpg', 'Marie Curie', 'Science Woman', 'Scientifique', 4, GETDATE(), 1, 8),
-('ISBN040', 'cover40.jpg', 'Mandela', 'Freedom Writer', 'Liberté', 6, GETDATE(), 1, 8),
+-- =====================
+-- FANTASY (categorie_id = 3)
+-- =====================
+('9780747532743', 3),
+('9782070615369', 3),
+('9780553573404', 3),
+('9780061120084', 3),
+('9780007117116', 3),
 
--- Informatique
-('ISBN041', 'cover41.jpg', 'Apprendre PHP', 'Dev Expert', 'Programmation PHP', 10, GETDATE(), 1, 9),
-('ISBN042', 'cover42.jpg', 'Maîtriser JavaScript', 'JS Ninja', 'Frontend avancé', 9, GETDATE(), 1, 9),
-('ISBN043', 'cover43.jpg', 'Symfony 7', 'Framework Master', 'Backend moderne', 8, GETDATE(), 1, 9),
-('ISBN044', 'cover44.jpg', 'Angular 17', 'Frontend Pro', 'SPA moderne', 7, GETDATE(), 1, 9),
-('ISBN045', 'cover45.jpg', 'React 18', 'UI Expert', 'Composants React', 6, GETDATE(), 1, 9),
+-- =====================
+-- POLICIER (categorie_id = 4)
+-- =====================
+('9782070408504', 4),
+('9780062073488', 4),
+('9782266093264', 4),
+('9782253160304', 4),
+('9782070421053', 4),
 
--- Jeunesse
-('ISBN046', 'cover46.jpg', 'Petit dragon', 'Kids Author', 'Conte enfant', 5, GETDATE(), 1, 10),
-('ISBN047', 'cover47.jpg', 'Aventure magique', 'Fairy Tale', 'Histoire magique', 6, GETDATE(), 1, 10),
-('ISBN048', 'cover48.jpg', 'Le monde des animaux', 'Nature Kid', 'Découverte', 7, GETDATE(), 1, 10),
-('ISBN049', 'cover49.jpg', 'Super héros', 'Comic Maker', 'Héros enfants', 8, GETDATE(), 1, 10),
-('ISBN050', 'cover50.jpg', 'Voyage scolaire', 'School Story', 'Aventure scolaire', 5, GETDATE(), 1, 10);
+-- =====================
+-- THRILLER (categorie_id = 5)
+-- =====================
+('9780307743657', 5),
+('9782266152602', 5),
+('9782266201959', 5),
+('9782253112174', 5),
+('9782253096344', 5),
+
+-- =====================
+-- DÉVELOPPEMENT PERSONNEL (categorie_id = 6)
+-- =====================
+('9782290159755', 6),
+('9782290140968', 6),
+('9782253238824', 6),
+('9782813218730', 6),
+('9782290135285', 6),
+
+-- =====================
+-- HISTOIRE (categorie_id = 7)
+-- =====================
+('9782070452439', 7),
+('9782262070333', 7),
+('9782070396337', 7),
+('9782081275680', 7),
+('9782020251554', 7),
+
+-- =====================
+-- BIOGRAPHIE (categorie_id = 8)
+-- =====================
+('9782253057623', 8),
+('9782253087316', 8),
+('9782021086834', 8),
+('9782070412136', 8),
+('9782253177000', 8),
+
+-- =====================
+-- INFORMATIQUE (categorie_id = 9)
+-- =====================
+('9782212673290', 9),
+('9781491957660', 9),
+('9780132350884', 9),
+('9781492051138', 9),
+('9780131103627', 9),
+
+-- =====================
+-- JEUNESSE (categorie_id = 10)
+-- =====================
+('9782070612750', 10),
+('9782070643020', 10),
+('9782070543696', 10),
+('9780064404990', 10),
+('9782070612361', 10);
+
+-- =====================
+-- EXEMPLES MANY-TO-MANY (un livre dans plusieurs catégories)
+-- =====================
+
+-- Le Hobbit (Fantasy + Science-Fiction)
+INSERT INTO livre_categorie (livre_isbn, categorie_id) VALUES
+('9780345339683', 3);
+
+-- Sapiens (Histoire + Développement personnel)
+INSERT INTO livre_categorie (livre_isbn, categorie_id) VALUES
+('9782070452439', 6);
+
+-- Clean Code (Informatique + Développement personnel)
+INSERT INTO livre_categorie (livre_isbn, categorie_id) VALUES
+('9782212673290', 6);
