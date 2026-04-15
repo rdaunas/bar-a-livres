@@ -8,7 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-import { AuthService } from '../../core/service/auth-service';
+import { AuthService } from '../../core/services/auth-service';
 import { NavigationService } from '../../core/services/navigation.service';
 
 @Component({

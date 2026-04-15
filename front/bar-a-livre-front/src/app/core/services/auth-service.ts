@@ -94,12 +94,7 @@ export class AuthService {
       return name.toLowerCase() == decodedToken.role.toLowerCase();
     })
   }
-  public getUserId() {
-    const token = localStorage.getItem("token") ?? "";
-    const decodedToken = jwtDecode<authToken>(token);
-    const userId = decodedToken.sub ?? "-1";
-    return Number.parseInt(userId);
-  }
+
   public role() {
     const token = localStorage.getItem("token") ?? "";
     const decodedToken = jwtDecode<authToken>(token);

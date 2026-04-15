@@ -28,33 +28,33 @@ export const routes: Routes = [
   {
     path: 'recherche',
     // canActivate: [authGuard, roleGuard],
-    data: { roles: ['user', 'LIBRARIAN', 'admin'] },
+    data: { roles: ['user', 'librarian', 'admin'] },
     loadComponent: () => import('./page/book-search/book-search').then(m => m.BookSearch),
   },
   {
     path: 'profil',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['user', 'LIBRARIAN', 'admin'] },
+    data: { roles: ['user', 'librarian', 'admin'] },
     loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
     //TODO import('./page/profil/profil')
   },
   {
     path: 'emprunts',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['LIBRARIAN', 'admin'] },
+    data: { roles: ['librarian', 'admin'] },
     loadComponent: () => import('./page/emprunt/emprunt').then(m => m.PageEmprunt),
   },
   {
     path: 'livres/ajouter',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['LIBRARIAN', 'admin'] },
+    data: { roles: ['librarian', 'admin'] },
     loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
     //TODO import('./page/livre-form/livre-form')
   },
   {
     path: 'statistiques',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['LIBRARIAN', 'admin'] },
+    data: { roles: ['librarian', 'admin'] },
     loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
     //TODO import('./page/statistiques/statistiques')
   },

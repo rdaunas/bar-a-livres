@@ -44,7 +44,7 @@ public class EmpruntController {
         }
 
         String token = authHeader.substring(7);
-        return Integer.valueOf(jwtUtil.getIdFromToken(token));
+        return Integer.valueOf(jwtUtil.getUserIdFromToken(token));
     }
 
     @GetMapping("/my")
