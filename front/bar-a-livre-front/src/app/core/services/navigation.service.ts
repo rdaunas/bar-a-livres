@@ -1,6 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { AuthService } from './auth-service';
+
 import { NavItem } from '../navigation/nav-item.model';
+import {AuthService} from '../service/auth-service';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
