@@ -1,14 +1,19 @@
 package fr.eni.baralivre.back.security;
 
+import fr.eni.baralivre.back.repository.UserRepository;
 import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,25 +30,30 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-
-    private final  AuthEntryPoint unauthorizedHandler;
-
     @Autowired
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPoint unauthorizedHandler) {
+    private UserRepository userRepository;
+    @Autowired
+    private AuthFilter authenticationJwtTokenFilter;
 
-        this.unauthorizedHandler = unauthorizedHandler;
+    @Bean
+    UserDetailsService userDetailsService() {
+        return username -> userRepository.findByEmail(username);
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
-    public AuthFilter authenticationJwtTokenFilter() {
-        return new AuthFilter();
-    }
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
     }
 
     @Bean
@@ -69,9 +79,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .exceptionHandling(e ->
-                        e.authenticationEntryPoint(unauthorizedHandler)
-                )
                 .sessionManagement(s ->
                         s.sessionCreationPolicy(
                                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
@@ -98,7 +105,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 );
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

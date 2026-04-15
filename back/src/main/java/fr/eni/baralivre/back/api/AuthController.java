@@ -1,10 +1,14 @@
 package fr.eni.baralivre.back.api;
 
+import fr.eni.baralivre.back.dto.LoginResponse;
+import fr.eni.baralivre.back.dto.LoginUserDto;
+import fr.eni.baralivre.back.dto.RegisterUserDto;
 import fr.eni.baralivre.back.dto.UserDTO;
 import fr.eni.baralivre.back.entity.Role;
 import fr.eni.baralivre.back.entity.User;
 import fr.eni.baralivre.back.repository.UserRepository;
 import fr.eni.baralivre.back.security.JwtUtil;
+import fr.eni.baralivre.back.service.AuthService;
 import fr.eni.baralivre.back.service.InscriptionService;
 import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +38,7 @@ public class AuthController {
     private final JwtUtil jwtUtils;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final InscriptionService inscriptionService;
+    private final AuthService authService;
 
     @Autowired
     public AuthController(
@@ -41,53 +46,72 @@ public class AuthController {
             UserRepository userRepository,
             PasswordEncoder encoder,
             JwtUtil jwtUtils,
-            UserDetailsServiceImpl userDetailsServiceImpl, InscriptionService inscriptionService) {
+            UserDetailsServiceImpl userDetailsServiceImpl, InscriptionService inscriptionService, AuthService authService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.inscriptionService = inscriptionService;
+        this.authService = authService;
     }
 
+        @PostMapping("/signup")
+        public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+            User registeredUser = authService.signup(registerUserDto);
 
-    @PostMapping("/signin")
-    public ResponseEntity authenticateUser(@RequestBody UserDTO user) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            user.getPassword()
-                    )
-            );
-            final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User AutnehticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
+            return ResponseEntity.ok(registeredUser);
+        }
+        @GetMapping("/test")
+        public String test() {
 
+            return "test";
+        }
+
+        @PostMapping("/signin")
+        public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+            User authenticatedUser = authService.authenticate(loginUserDto);
+
+            String jwtToken = jwtUtils.generateToken(authenticatedUser);
+
+            LoginResponse loginResponse =  LoginResponse.builder().token(jwtToken).expiresIn(jwtUtils.getExpirationTime()).build();
+            return ResponseEntity.ok(loginResponse);
+        }
+
+    /*
+        @PostMapping("/signin")
+        public ResponseEntity authenticateUser(@RequestBody UserDTO user) {
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                user.getPassword()
+                        )
+                );
+                final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                User AutnehticatedUser = userDetailsServiceImpl.getUserInformation(userDetails.getUsername());
+
+                Map<String,String> payload = new HashMap<>();
+                payload.put("token",jwtUtils.generateToken(userDetails.getUsername(),AutnehticatedUser.getNom(),AutnehticatedUser.getPrenom(),AutnehticatedUser.getId(),AutnehticatedUser.getRole().getLabel()));
+                return new ResponseEntity<>(payload,HttpStatus.OK);
+            }
+            catch(AuthenticationException e) {
+                return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        @PostMapping("/signup")
+        public ResponseEntity<?> registerUser(@RequestBody UserDTO user) {
+
+            if(inscriptionService.inscrire(user)) {
+                Map<String,String> payload = new HashMap<>();
+                payload.put("message","Inscription réussie");
+                return new  ResponseEntity<>(payload, HttpStatus.OK);
+            }
             Map<String,String> payload = new HashMap<>();
-            payload.put("token",jwtUtils.generateToken(userDetails.getUsername(),AutnehticatedUser.getNom(),AutnehticatedUser.getPrenom(),AutnehticatedUser.getId(),AutnehticatedUser.getRole().getLabel()));
-            return new ResponseEntity<>(payload,HttpStatus.OK);
-        }
-        catch(AuthenticationException e) {
-            return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
-        }
-    }
+            payload.put("message","L'utilisateur existe déjà.");
+            return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO user) {
+        }*/
 
-        if(inscriptionService.inscrire(user)) {
-            Map<String,String> payload = new HashMap<>();
-            payload.put("message","Inscription réussie");
-            return new  ResponseEntity<>(payload, HttpStatus.OK);
-        }
-        Map<String,String> payload = new HashMap<>();
-        payload.put("message","L'utilisateur existe déjà.");
-        return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
-
-    }
-    @GetMapping("/test")
-    public String test() {
-
-        return "test";
-    }
 }
