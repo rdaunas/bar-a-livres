@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {jwtDecode, JwtPayload} from "jwt-decode";
+import {Router} from '@angular/router';
 
 interface authToken extends JwtPayload {
   nom: string,
@@ -27,6 +28,7 @@ export class AuthService {
 
 
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   public addToken() : HttpHeaders {
     return new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')});
@@ -38,17 +40,16 @@ export class AuthService {
       .post<HttpResponse<{token:string}>>('http://localhost:8080/api/v1/auth/signin', {
           "email": username,
           "password": password
-        }
+        },{ observe: 'response' }
       )
       .subscribe((response) => {
-        /*
         if(response.status != 200) {
           return new AuthError("Erreur serveur");
         }
-        */
-        const token = JSON.stringify(response);
+        const token = JSON.stringify(response.body);
         const o = JSON.parse(token);
         localStorage.setItem("token", o.token);
+        this.router.navigate(['/catalogue']);
         return "OK";
       });
   }
@@ -60,13 +61,13 @@ export class AuthService {
           password: password,
           nom: lastName,
           prenom: firstName
-      }).subscribe(response => {
-        if(response.ok){
-          this.login(username, password)
+      },{ observe: 'response' }).subscribe(response => {
+        if(response.status == 200){
+          this.login(username, password);
           return;
         }
         else {
-          return new AuthError(response.body ?? "Erreur serveur")
+          return new AuthError(response.body?.body ?? "Erreur serveur")
         }
 
       })
@@ -85,11 +86,11 @@ export class AuthService {
 
   }
 
-  public hasRole(roleName: string[]) {
+  public hasRole(roleName: string[]) : boolean {
     const token = localStorage.getItem("token") ?? "";
     const decodedToken = jwtDecode<authToken>(token);
-    roleName.forEach(name => {
-      return name == decodedToken.role;
+    return roleName.some(name => {
+      return name == decodedToken.role.toLowerCase();
     })
   }
   public getUserId() {

@@ -76,9 +76,13 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody UserDTO user) {
 
         if(inscriptionService.inscrire(user)) {
-            return new  ResponseEntity<>("Inscription réussie", HttpStatus.OK);
+            Map<String,String> payload = new HashMap<>();
+            payload.put("message","Inscription réussie");
+            return new  ResponseEntity<>(payload, HttpStatus.OK);
         }
-        return new ResponseEntity<>("L'utilisateur existe déjà.", HttpStatus.BAD_REQUEST);
+        Map<String,String> payload = new HashMap<>();
+        payload.put("message","L'utilisateur existe déjà.");
+        return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
 
     }
     @GetMapping("/test")
