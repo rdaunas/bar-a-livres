@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
 import {
   FormBuilder,
   FormControl,
@@ -19,7 +19,8 @@ import {AuthService} from '../../core/service/auth-service';
     MatFormField,
     MatInput,
     MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatHint
   ],
   templateUrl: './inscription.html'
 })
