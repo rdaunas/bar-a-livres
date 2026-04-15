@@ -1,0 +1,25 @@
+<form (submit)="onSubmit($event)" [formGroup]="loginForm" class="my-20">
+  <div class="flex flex-col w-sm rounded-3xl border-1 border-blue-500 m-auto p-10">
+    <h2 class="place-self-center text-lg text-blue-500 mb-10">Connexion</h2>
+    <mat-form-field>
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        placeholder="pat@example.com"
+        formControlName="email"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        required
+      />
+    </mat-form-field>
+    <button matButton="filled" type="submit" [disabled]="!loginForm.valid">Se connecter</button>
+  </div>
+</form>
+
