@@ -41,7 +41,7 @@ public class JwtUtil {
     public String getUserFromToken(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }
-    public String getIdFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("id").toString();
     }
     public boolean validateToken(String token) {

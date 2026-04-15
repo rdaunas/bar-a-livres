@@ -13,8 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'inscription',
-    loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
-  //TODO import('./ui/inscription/inscription')
+    loadComponent: () =>
+      import('./ui/inscription/inscription').then(m => m.Inscription)
   },
   {
     path: 'catalogue',
