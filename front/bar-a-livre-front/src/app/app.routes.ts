@@ -5,12 +5,12 @@ export const routes: Routes = [
   {
     path: 'connexion',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
   },
   {
     path: 'inscription',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/inscription/inscription').then(m => m.Inscription)
   },
   {
     path: 'catalogue',
@@ -25,7 +25,7 @@ export const routes: Routes = [
   {
     path: 'profil',
     loadComponent: () =>
-      import('./ui/connexion/connexion').then(m => m.ConnexionComponent)
+      import('./ui/connexion/connexion').then(m => m.Connexion)
     // TODO Remplacer par : ProfilComponent
   },
   {
