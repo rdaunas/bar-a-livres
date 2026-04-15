@@ -19,6 +19,20 @@ export class BookService {
     return this.http.get<PageResponse<LivreDTO>>(this.apiUrl, { params });
   }
 
+  searchBooks(titre: string, page: number, size: number, categorieIds: number[] = [] ) {
+    let params: any = {
+      titre,
+      page,
+      size
+    };
+
+    if (categorieIds.length > 0) {
+      params.categorieIds = categorieIds;
+    }
+
+    return this.http.get<any>('http://localhost:8080/api/books/search', { params });
+  }
+
   findByIsbn(isbn: string): Observable<LivreDTO> {
     return this.http.get<LivreDTO>(`${this.apiUrl}/${isbn}`);
   }

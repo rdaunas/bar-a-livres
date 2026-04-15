@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import {BookSearch} from './page/book-search/book-search';
 
 export const routes: Routes = [
 
@@ -26,10 +27,9 @@ export const routes: Routes = [
   },
   {
     path: 'recherche',
-    canActivate: [authGuard, roleGuard],
+    // canActivate: [authGuard, roleGuard],
     data: { roles: ['user', 'librarian', 'admin'] },
-    loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
-    //TODO import('./page/book-search/book-search')
+    loadComponent: () => import('./page/book-search/book-search').then(m => m.BookSearch),
   },
   {
     path: 'profil',
