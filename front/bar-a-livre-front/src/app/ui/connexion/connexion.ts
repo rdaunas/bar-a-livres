@@ -4,6 +4,7 @@ import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angula
 import {AuthService} from '../../core/service/auth-service';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-connexion',
