@@ -1,16 +1,19 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {jwtDecode, JwtPayload} from "jwt-decode";
 
+interface authToken extends JwtPayload {
+  nom: string,
+  prenom: string,
+  email: string,
+  role: string
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
 
-  // Setup session obj in app-root with role + nom + prenom
-  // Conditional rendering nav link by session.role
-  // Auto login after signup
 
   private http = inject(HttpClient);
 
@@ -20,7 +23,6 @@ export class AuthService {
 
 
   public login(username: string,password: string ) {
-    const h  = new HttpHeaders({'Access-Control-Allow-Origin': '*'});
     this.http
       .post<string>('http://localhost:8080/api/v1/auth/signin', {
           "email": username,
@@ -41,8 +43,8 @@ export class AuthService {
           password: password,
           nom: lastName,
           prenom: firstName
-      }).subscribe(retour => {
-        return retour;
+      }).subscribe(response => {
+        this.login(username, password)
       })
     }
     catch (e : any) {
@@ -52,6 +54,18 @@ export class AuthService {
 
   public logout() {
     localStorage.removeItem("token");
-    //navigate to home
+  }
+
+  public isAuthenticated() {
+    return localStorage.getItem("token") != null || localStorage.getItem("token") != undefined;
+
+  }
+
+  public hasRole(roleName: string[]) {
+    const token = localStorage.getItem("token") ?? "";
+    const decodedToken = jwtDecode<authToken>(token);
+    roleName.forEach(name => {
+      return name == decodedToken.role;
+    })
   }
 }
