@@ -4,7 +4,6 @@ import fr.eni.baralivre.back.dto.EmpruntResquestDTO;
 import fr.eni.baralivre.back.entity.Emprunt;
 import fr.eni.baralivre.back.security.JwtUtil;
 import fr.eni.baralivre.back.service.EmpruntService;
-import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,28 +44,34 @@ public class EmpruntController {
         }
 
         String token = authHeader.substring(7);
-        return Integer.valueOf(jwtUtil.getUserFromToken(token));
+        return Integer.valueOf(jwtUtil.getUserIdFromToken(token));
     }
 
     @GetMapping("/my")
     public ResponseEntity<List<Emprunt>> getMesEmprunts(HttpServletRequest request) {
         try {
-            //Integer userId = extractUserId(request);
-            Integer userId = 4;
+            Integer userId = extractUserId(request);
+
             List<Emprunt> emprunts = empruntService.chargerToutLesEmpruntParUserId(userId);
             return ResponseEntity.ok(emprunts);
+
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
     @PostMapping
-    public ResponseEntity<Emprunt> emprunterLivre(@RequestBody EmpruntResquestDTO request) {
+    public ResponseEntity<Emprunt> emprunterLivre(
+            @RequestBody EmpruntResquestDTO request,
+            HttpServletRequest httpRequest
+    ) {
         try {
-            Integer userId = 4;
+            int userId = this.extractUserId(httpRequest);
             Emprunt emprunt = empruntService.creerEmprunt(userId, request.getLivreIsbn());
             return ResponseEntity.ok(emprunt);
+
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
     }
     @PutMapping("/{id}/return")
@@ -75,7 +80,8 @@ public class EmpruntController {
             Emprunt emprunt = empruntService.retournerEmprunt(id);
             return ResponseEntity.ok(emprunt);
         }catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

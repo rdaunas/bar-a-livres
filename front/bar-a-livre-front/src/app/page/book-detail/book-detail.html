@@ -35,6 +35,9 @@
 
     <div class="detail-actions">
       <button mat-flat-button (click)="emprunter()" >EMPRUNTER</button>
+      @if (book(); as b) {
+      <button mat-flat-button  (click)="emprunter(b.isbn)">EMPRUNTER</button>
+      }
       <button mat-flat-button (click)="reserver()">RÉSERVER LE LIVRE</button>
     </div>
 
