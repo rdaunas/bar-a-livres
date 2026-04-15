@@ -32,4 +32,8 @@ export class AuthService {
   hasRole(role: Role): boolean {
     return this._currentUser()?.role === role;
   }
+  public getUserId() {
+
+    return 1;
+  }
 }

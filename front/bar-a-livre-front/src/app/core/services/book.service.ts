@@ -10,6 +10,7 @@ export class BookService {
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/books';
+  private readonly apiUrlloans = 'http://localhost:8080/api/loans';
 
   findAll(page: number = 0, size: number = 20): Observable<PageResponse<LivreDTO>> {
     const params = new HttpParams()
@@ -25,5 +26,14 @@ export class BookService {
 
   isAvailable(isbn: string) {
     return this.http.get<boolean>(`/api/books/${isbn}/available`);
+  }
+
+  emprunter(userId: number, isbn: string) {
+    return this.http.post<LivreDTO>(`${this.apiUrlloans}`, {isbn : isbn},{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
   }
 }

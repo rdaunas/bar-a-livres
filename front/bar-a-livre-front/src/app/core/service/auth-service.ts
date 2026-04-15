@@ -52,4 +52,8 @@ export class AuthService {
       return e.message()
     }
   }
+  public getUserId() {
+
+    return 1;
+  }
 }

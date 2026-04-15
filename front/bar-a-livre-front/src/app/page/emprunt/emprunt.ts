@@ -47,7 +47,6 @@ export class PageEmprunt implements OnInit{
         this.Emprunts.set(data);
         this.totalElements.set(page.length);
         this.isLoading.set(false);
-        console.log('DATA API 👉', page);
       },
       error: () => {
         this.snackBar.open('Erreur lors du chargement des emprunts.', 'Fermer', { duration: 3000 });

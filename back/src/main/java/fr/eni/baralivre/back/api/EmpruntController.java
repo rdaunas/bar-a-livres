@@ -51,20 +51,26 @@ public class EmpruntController {
     @GetMapping("/my")
     public ResponseEntity<List<Emprunt>> getMesEmprunts(HttpServletRequest request) {
         try {
-            //Integer userId = extractUserId(request);
-            Integer userId = 4;
+            Integer userId = extractUserId(request);
+
             List<Emprunt> emprunts = empruntService.chargerToutLesEmpruntParUserId(userId);
             return ResponseEntity.ok(emprunts);
+
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
     @PostMapping
-    public ResponseEntity<Emprunt> emprunterLivre(@RequestBody EmpruntResquestDTO request) {
+    public ResponseEntity<Emprunt> emprunterLivre(
+            @RequestBody EmpruntResquestDTO request,
+            HttpServletRequest httpRequest
+    ) {
         try {
-            Integer userId = 4;
+            Integer userId = extractUserId(httpRequest);
+
             Emprunt emprunt = empruntService.creerEmprunt(userId, request.getLivreIsbn());
             return ResponseEntity.ok(emprunt);
+
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }

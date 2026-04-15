@@ -1,6 +1,6 @@
 export interface EmpruntModel {
   id: number;
-  userId: bigint;
+  userId: number;
   livreIsbn: string;
   typeStatus: string;
   dateDemande: Date;
