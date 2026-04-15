@@ -37,7 +37,4 @@ export class BookService {
     return this.http.get<LivreDTO>(`${this.apiUrl}/${isbn}`);
   }
 
-  isAvailable(isbn: string) {
-    return this.http.get<boolean>(`/api/books/${isbn}/available`);
-  }
 }

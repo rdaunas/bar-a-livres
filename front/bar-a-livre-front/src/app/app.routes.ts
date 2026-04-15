@@ -22,12 +22,12 @@ export const routes: Routes = [
   },
   {
     path: 'catalogue/:isbn',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     loadComponent: () => import('./page/book-detail/book-detail').then(m => m.BookDetail),
   },
   {
     path: 'recherche',
-    // canActivate: [authGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['user', 'librarian', 'admin'] },
     loadComponent: () => import('./page/book-search/book-search').then(m => m.BookSearch),
   },
@@ -54,14 +54,14 @@ export const routes: Routes = [
   {
     path: 'statistiques',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['librarian', 'admin'] },
+    data: { roles: ['LIBRARIAN', 'ADMIN'] },
     loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
     //TODO import('./page/statistiques/statistiques')
   },
   {
     path: 'utilisateurs',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] },
+    data: { roles: ['ADMIN'] },
     loadComponent: () => import('./ui/connexion/connexion').then(m => m.Connexion),
     //TODO import('./page/utilisateurs/utilisateurs')
   },

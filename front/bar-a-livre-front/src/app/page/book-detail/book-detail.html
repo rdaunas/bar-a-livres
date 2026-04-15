@@ -12,12 +12,11 @@
     <div class="detail-content">
 
       <div class="detail-left">
-        <img src="assets/book-placeholder.png" alt="Couverture" class="detail-cover"/>
-<!--        <div class="detail-stars">-->
-<!--          @for (star of getStars(); track $index) {-->
-<!--            <span class="detail-star" [class.filled]="star">★</span>-->
-<!--          }-->
-<!--        </div>-->
+        <img
+          [src]="book()?.couverture"
+          alt="Couverture"
+          class="detail-cover"
+        />
       </div>
 
       <div class="detail-right">
@@ -35,9 +34,8 @@
     </div>
 
     <div class="detail-actions">
-      <button mat-flat-button (click)="emprunter()" [@If]="canBorrow()">EMPRUNTER</button>
+      <button mat-flat-button (click)="emprunter()" >EMPRUNTER</button>
       <button mat-flat-button (click)="reserver()">RÉSERVER LE LIVRE</button>
-      <button mat-stroked-button color="warn" (click)="annulerReservation()">ANNULER RÉSERVATION</button>
     </div>
 
   } @else if (!isLoading()) {

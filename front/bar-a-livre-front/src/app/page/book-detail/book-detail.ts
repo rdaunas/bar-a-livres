@@ -25,26 +25,16 @@ export class BookDetail implements OnInit {
     if (isbn) {
       this.isLoading.set(true);
       this.bookService.findByIsbn(isbn).subscribe({
-        next: (b) => { this.book.set(b); this.isLoading.set(false); },
+        next: (b) => {
+          this.book.set(b);
+          this.isLoading.set(false); },
         error: () => { this.isLoading.set(false); }
       });
     }
   }
 
-  // getStars(): boolean[] {
-  //   const note = this.book()?.note ?? 0;
-  //   return Array.from({ length: 5 }, (_, i) => i < Math.round(note));
-  // }
-
   emprunter(): void {}
   reserver(): void {}
   annulerReservation(): void {}
 
-  canBorrow = signal<boolean>(false);
-
-  checkAvailability(isbn: string) {
-    this.bookService.isAvailable(isbn).subscribe(res => {
-      this.canBorrow.set(res);
-    });
-  }
 }
