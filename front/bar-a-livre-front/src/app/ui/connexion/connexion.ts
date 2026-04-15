@@ -1,7 +1,7 @@
 import {Component, inject, signal} from '@angular/core';
 
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../core/service/auth-service';
+import {AuthService} from '../../core/services/auth-service';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';

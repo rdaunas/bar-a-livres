@@ -10,7 +10,7 @@ import {
   Validators
 } from '@angular/forms';
 import {submit} from '@angular/forms/signals';
-import {AuthService} from '../../core/service/auth-service';
+import {AuthService} from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-inscription',

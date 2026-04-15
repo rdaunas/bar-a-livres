@@ -8,7 +8,7 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router  = inject(Router);
   const allowed = route.data['roles'] as UserRole[];
 
-  if (auth.hasRole(...allowed)) return true;
+  if (auth.hasRole([...allowed])) return true;
 
   router.navigate(['/403']);
   return false;

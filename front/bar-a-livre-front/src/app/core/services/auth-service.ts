@@ -1,11 +1,25 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { UserRole } from '../auth/user-role.model';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {jwtDecode, JwtPayload} from "jwt-decode";
+import {Router} from '@angular/router';
+import {UserRole} from '../auth/user-role.model';
 
-interface AuthResponse {
-  token: string;
-  role: UserRole;
+interface authToken extends JwtPayload {
+  nom: string,
+  prenom: string,
+  email: string,
+  role: string
+}
+
+export class AuthError {
+  private message: string;
+
+  constructor(message: string) {
+    this.message = message;
+  }
+  getMessage() {
+    return this.message
+  }
 }
 
 @Injectable({
@@ -13,68 +27,83 @@ interface AuthResponse {
 })
 export class AuthService {
 
+
   private http = inject(HttpClient);
+  private router = inject(Router);
 
-  private readonly _role = signal<UserRole>(this.getStoredRole());
-  readonly role = this._role.asReadonly();
-
-  private readonly _isAuthenticated = signal<boolean>(!!this.getStoredToken());
-  readonly isAuthenticated = this._isAuthenticated.asReadonly();
-
-  addToken(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    });
+  public addToken() : HttpHeaders {
+    return new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')});
   }
 
-  login(username: string, password: string): Observable<AuthResponse> {
+
+  public login(username: string,password: string ) {
     return this.http
-      .post<AuthResponse>('http://localhost:8080/api/v1/auth/signin', {
-        email: username,
-        password
+      .post<HttpResponse<{token:string}>>('http://localhost:8080/api/v1/auth/signin', {
+          "email": username,
+          "password": password
+        },{ observe: 'response' }
+      )
+      .subscribe((response) => {
+        if(response.status != 200) {
+          return new AuthError("Erreur serveur");
+        }
+        const token = JSON.stringify(response.body);
+        const o = JSON.parse(token);
+        localStorage.setItem("token", o.token);
+        this.router.navigate(['/catalogue']);
+        return "OK";
+      });
+  }
+
+  public signUp(username: string, password: string, lastName: string, firstName: string) {
+    try {
+      this.http.post<HttpResponse<string>>('http://localhost:8080/api/v1/auth/signup', {
+          email:username,
+          password: password,
+          nom: lastName,
+          prenom: firstName
+      },{ observe: 'response' }).subscribe(response => {
+        if(response.status == 200){
+          this.login(username, password);
+          return;
+        }
+        else {
+          return new AuthError(response.body?.body ?? "Erreur serveur")
+        }
+
       })
-      .pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('role', response.role);
-          this._role.set(response.role);
-          this._isAuthenticated.set(true);
-        })
-      );
+    }
+    catch (e : any) {
+      return e.message()
+    }
   }
 
-  signUp(
-    username: string,
-    password: string,
-    lastName: string,
-    firstName: string
-  ): Observable<any> {
-    return this.http.post(
-      'http://localhost:8080/api/v1/auth/signup',
-      {
-        email: username,
-        password,
-        nom: lastName,
-        prenom: firstName
-      }
-    );
+  public logout() {
+    localStorage.removeItem("token");
   }
 
-  logout(): void {
-    localStorage.clear();
-    this._role.set('public');
-    this._isAuthenticated.set(false);
+  public isAuthenticated() {
+    return localStorage.getItem("token") != null || localStorage.getItem("token") != undefined;
+
   }
 
-  hasRole(...roles: UserRole[]): boolean {
-    return roles.includes(this._role());
+  public hasRole(roleName: string[]) : boolean {
+    const token = localStorage.getItem("token") ?? "";
+    const decodedToken = jwtDecode<authToken>(token);
+    return roleName.some(name => {
+      return name.toLowerCase() == decodedToken.role.toLowerCase();
+    })
   }
-
-  private getStoredRole(): UserRole {
-    return (localStorage.getItem('role') as UserRole) ?? 'public';
+  public getUserId() {
+    const token = localStorage.getItem("token") ?? "";
+    const decodedToken = jwtDecode<authToken>(token);
+    const userId = decodedToken.sub ?? "-1";
+    return Number.parseInt(userId);
   }
-
-  private getStoredToken(): string | null {
-    return localStorage.getItem('token');
+  public role() {
+    const token = localStorage.getItem("token") ?? "";
+    const decodedToken = jwtDecode<authToken>(token);
+    console.log(decodedToken.role);
+    return decodedToken.role.toLowerCase() as UserRole;
   }
 }
