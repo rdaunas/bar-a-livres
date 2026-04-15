@@ -35,16 +35,18 @@ export class AuthService {
 
   public login(username: string,password: string ) {
     return this.http
-      .post<HttpResponse<string>>('http://localhost:8080/api/v1/auth/signin', {
+      .post<HttpResponse<{token:string}>>('http://localhost:8080/api/v1/auth/signin', {
           "email": username,
           "password": password
         }
       )
       .subscribe((response) => {
-        if(!response.ok) {
-          return new AuthError(response.body ?? "Erreur serveur");
+        /*
+        if(response.status != 200) {
+          return new AuthError("Erreur serveur");
         }
-        const token = JSON.stringify(response.body);
+        */
+        const token = JSON.stringify(response);
         const o = JSON.parse(token);
         localStorage.setItem("token", o.token);
         return "OK";
