@@ -15,7 +15,7 @@
 
       <mat-form-field class="search-form-field">
         <mat-label>Rechercher un livre</mat-label>
-        <input matInput type="text" [(ngModel)]="value" placeholder="Titre, Auteur, ISBN..." (keyup.enter)="onSearch()">
+        <input matInput type="text" [(ngModel)]="value" placeholder="Titre ?" minlength="2" (keyup.enter)="onSearch()">
       </mat-form-field>
 
       <button mat-stroked-button color="warn" class="book-search-btn" (click)="onSearch()">
@@ -27,7 +27,6 @@
     <div class="book-list__grid">
       @for (book of books(); track book.isbn) {
         <mat-card class="book-card">
-
 
           <div class="book-card__layout">
 

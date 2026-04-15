@@ -15,15 +15,26 @@ public interface LivreRepository extends JpaRepository<Livre, String> {
     Optional<Livre> findByIsbn(String isbn);
 
     @Query("""
-            SELECT l
-            FROM Livre l
-            WHERE (:titre IS NULL OR LOWER(l.titre) LIKE LOWER(CONCAT('%', :titre, '%')))
-            AND (
-                :categorieIds IS NULL OR EXISTS (
-                    SELECT c FROM l.categories c WHERE c.id IN :categorieIds
-                )
-            )
-            """)
-    Page<Livre> search(@Param("categorieIds") List<Integer> categorieIds, @Param("titre") String titre, Pageable pageable);
-
+    SELECT l
+    FROM Livre l
+    WHERE (
+        :search IS NULL
+        OR LOWER(l.titre) LIKE LOWER(CONCAT('%', :search, '%'))
+        OR LOWER(l.isbn) LIKE LOWER(CONCAT('%', :search, '%'))
+        OR LOWER(l.auteur) LIKE LOWER(CONCAT('%', :search, '%'))
+    )
+    AND (
+        :categorieIds IS NULL
+        OR EXISTS (
+            SELECT c
+            FROM l.categories c
+            WHERE c.id IN :categorieIds
+        )
+    )
+""")
+    Page<Livre> search(
+            @Param("categorieIds") List<Integer> categorieIds,
+            @Param("search") String search,
+            Pageable pageable
+    );
 }
