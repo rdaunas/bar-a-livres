@@ -4,7 +4,6 @@ import fr.eni.baralivre.back.dto.EmpruntResquestDTO;
 import fr.eni.baralivre.back.entity.Emprunt;
 import fr.eni.baralivre.back.security.JwtUtil;
 import fr.eni.baralivre.back.service.EmpruntService;
-import fr.eni.baralivre.back.service.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +44,7 @@ public class EmpruntController {
         }
 
         String token = authHeader.substring(7);
-        return Integer.valueOf(jwtUtil.getUserFromToken(token));
+        return Integer.valueOf(jwtUtil.getIdFromToken(token));
     }
 
     @GetMapping("/my")
@@ -66,13 +65,13 @@ public class EmpruntController {
             HttpServletRequest httpRequest
     ) {
         try {
-            Integer userId = extractUserId(httpRequest);
-
+            int userId = this.extractUserId(httpRequest);
             Emprunt emprunt = empruntService.creerEmprunt(userId, request.getLivreIsbn());
             return ResponseEntity.ok(emprunt);
 
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
     }
     @PutMapping("/{id}/return")
@@ -81,7 +80,8 @@ public class EmpruntController {
             Emprunt emprunt = empruntService.retournerEmprunt(id);
             return ResponseEntity.ok(emprunt);
         }catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

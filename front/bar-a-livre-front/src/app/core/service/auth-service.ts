@@ -86,13 +86,17 @@ export class AuthService {
 
   }
 
-  public hasRole(roleName: string[]) {
-    const token = localStorage.getItem("token") ?? "";
+  public hasRole(roleName: string | string[]): boolean {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
     const decodedToken = jwtDecode<authToken>(token);
-    roleName.forEach(name => {
-      return name == decodedToken.role;
-    })
+
+    const roles = Array.isArray(roleName) ? roleName : [roleName];
+
+    return roles.includes(decodedToken.role);
   }
+
   public getUserId() {
     const token = localStorage.getItem("token") ?? "";
     const decodedToken = jwtDecode<authToken>(token);

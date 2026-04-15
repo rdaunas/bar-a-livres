@@ -3,6 +3,8 @@ import {TableauEmprunts} from '../../ui/tableau.emprunts/tableau.emprunts';
 import {EmpruntService} from '../../core/services/emprunt.service';
 import {EmpruntModel} from '../../core/models/emprunt.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-page.emprunt',
@@ -13,6 +15,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class PageEmprunt implements OnInit{
   private readonly emprunts = inject (EmpruntService);
   private readonly snackBar = inject(MatSnackBar);
+  private router = inject(Router);
   readonly Emprunts = signal(<EmpruntModel[]>([]))
   readonly isLoading = signal(false);
   readonly totalElements = signal(0);
@@ -25,7 +28,13 @@ export class PageEmprunt implements OnInit{
   }
   retournerLivre(id: number): void {
     this.emprunts.retournerLivre(id).subscribe({
-      next: () => {}
+      next: () => {
+        this.snackBar.open('Livre retourné avec succès', 'OK', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+        location.reload();
+      }
     })
   }
 

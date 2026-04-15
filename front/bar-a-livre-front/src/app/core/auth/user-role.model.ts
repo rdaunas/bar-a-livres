@@ -1,1 +1,1 @@
-export type UserRole = 'public' | 'user' | 'librarian' | 'admin';
+export type UserRole = 'public' | 'user' | 'LIBRARIAN' | 'admin';

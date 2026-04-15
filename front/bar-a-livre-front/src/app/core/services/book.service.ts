@@ -42,10 +42,11 @@ export class BookService {
     return this.http.get<boolean>(`/api/books/${isbn}/available`);
   }
 
-  emprunter(userId: number, isbn: string) {
-    return this.http.post<LivreDTO>(`${this.apiUrlloans}`, {isbn : isbn},{
+  emprunter(isbn: string) {
+    return this.http.post<LivreDTO>(`${this.apiUrlloans}`, {
+      livreIsbn: isbn
+    }, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });

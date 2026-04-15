@@ -1,12 +1,11 @@
 import {Component, inject, signal, OnInit, Output, EventEmitter} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe, NgIf} from '@angular/common';
 import { BookService } from '../../core/services/book.service';
 import { LivreDTO } from '../../core/models/book.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {EmpruntModel} from '../../core/models/emprunt.model';
-import {AuthService} from '../../core/service/auth-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-book-detail',
@@ -18,7 +17,8 @@ import {AuthService} from '../../core/service/auth-service';
 export class BookDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private bookService = inject(BookService);
-  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   @Output() valider = new EventEmitter <[number, string]>();
 
@@ -42,13 +42,25 @@ export class BookDetail implements OnInit {
   // }
 
   emprunter(isbn: string) {
-    const userId = this.authService.getUserId()
-    this.effectuerEmprunt( userId, isbn);
+    this.effectuerEmprunt(isbn);
   }
 
-  effectuerEmprunt(userId: number, isbn: string): void {
-    this.bookService.emprunter(userId, isbn).subscribe({
-      next: ()=>{}
+  effectuerEmprunt(isbn: string): void {
+    this.bookService.emprunter(isbn).subscribe({
+      next: ()=>{
+        this.snackBar.open('Livre emprunté avec succès', 'OK', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+        this.checkAvailability(isbn);
+        this.router.navigate(['/catalogue']);
+      },
+      error: () => {
+        this.snackBar.open('Impossible d’emprunter ce livre', 'Fermer', {
+          duration: 4000,
+          panelClass: ['snackbar-error']
+        });
+      }
     })
 
   }

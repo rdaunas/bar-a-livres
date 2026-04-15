@@ -17,10 +17,9 @@ POST {{baseUrl}}/api/loans
 Content-Type: application/json
 
 {
-  "userId" : "{{userId}}",
   "livreIsbn": "{{livreIsbn}}"
 }
 
 ### PUT - Retourner un livre
-PUT {{baseUrl}}/api/loans/11/return
+PUT {{baseUrl}}/api/loans/15/return
 
