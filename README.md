@@ -20,3 +20,7 @@ gradle bootRun
 #Setup base de données
 ## Pré-requis SQL SERVER
 Executer dans la base les scripts Init_DB.sql et 1-migration.sql présent dans ./back/src/main/ressources/Script_bdd
+
+
+# Documentation APi Swagger
+http://localhost:8080/swagger-ui/index.html
