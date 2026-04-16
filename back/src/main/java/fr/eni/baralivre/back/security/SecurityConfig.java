@@ -88,15 +88,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/api/books/{isbn}").hasRole("librarian")
                                 .requestMatchers(HttpMethod.DELETE, "/api/books/{isbn}").hasRole("ADMIN")
 
-//                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
-//                                .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
-//                                .requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER")
-//                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").hasRole("LIBRARIAN")
-
-                                .requestMatchers(HttpMethod.GET,"/api/loans/my").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/loans").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/loans").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/loans/my").hasRole("USER")
+                               .requestMatchers(HttpMethod.GET,"/api/loans").hasRole("LIBRARIAN")
+                               .requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER")
+                                .requestMatchers(HttpMethod.PUT, "/api/loans/{id}/return").hasRole("LIBRARIAN")
 
                                 .requestMatchers(HttpMethod.POST, "/api/books/{id}/ratings").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/ratings/{id}").permitAll()
@@ -104,7 +99,8 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signin").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
-//                                .anyRequest().authenticated()
+
+                                .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

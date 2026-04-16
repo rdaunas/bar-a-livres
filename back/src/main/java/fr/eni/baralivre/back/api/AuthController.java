@@ -85,9 +85,4 @@ public class AuthController {
         return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
 
     }
-    @GetMapping("/test")
-    public String test() {
-
-        return "test";
-    }
 }

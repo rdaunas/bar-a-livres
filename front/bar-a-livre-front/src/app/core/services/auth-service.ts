@@ -98,7 +98,6 @@ export class AuthService {
   public role() {
     const token = localStorage.getItem("token") ?? "";
     const decodedToken = jwtDecode<authToken>(token);
-    console.log(decodedToken.role);
     return decodedToken.role.toLowerCase() as UserRole;
   }
 }
