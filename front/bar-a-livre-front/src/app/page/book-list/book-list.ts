@@ -16,7 +16,7 @@ import { LivreDTO } from '../../core/models/book.model';
 import {Router} from '@angular/router';
 import {MatFormField, MatInputModule, MatLabel} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
-import {MatIcon, MatIconModule} from '@angular/material/icon';
+import { MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-book-list',
@@ -50,7 +50,6 @@ export class BookList implements OnInit {
   readonly books = signal<LivreDTO[]>([]);
   readonly isLoading = signal(false);
   readonly totalElements = signal(0);
-  readonly availabilityMap = signal<Record<string, boolean>>({});
 
   pageIndex = 0;
   pageSize = 20;
@@ -70,9 +69,6 @@ export class BookList implements OnInit {
         this.totalElements.set(page.totalElements);
         this.isLoading.set(false);
 
-        page.content.forEach(book => {
-          this.checkAvailability(book.isbn);
-        });
       },
       error: () => {
         this.snackBar.open('Erreur lors du chargement des livres.', 'Fermer', { duration: 3000 });
@@ -89,21 +85,6 @@ export class BookList implements OnInit {
 
   goToDetail(isbn: string) {
     this.router.navigate(['/catalogue', isbn]);
-  }
-
-  checkAvailability(isbn: string) {
-    this.bookService.isAvailable(isbn).subscribe(res => {
-      this.availabilityMap.update(map => ({
-        ...map,
-        [isbn]: res
-      }));
-
-      console.log(isbn, 'available:', res);
-    });
-  }
-
-  canBorrow(isbn: string): boolean {
-    return this.availabilityMap()[isbn] ?? false;
   }
 
   value = '';

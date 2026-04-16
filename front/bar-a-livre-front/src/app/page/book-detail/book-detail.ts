@@ -36,11 +36,6 @@ export class BookDetail implements OnInit {
     }
   }
 
-  // getStars(): boolean[] {
-  //   const note = this.book()?.note ?? 0;
-  //   return Array.from({ length: 5 }, (_, i) => i < Math.round(note));
-  // }
-
   emprunter(isbn: string) {
     this.effectuerEmprunt(isbn);
   }
