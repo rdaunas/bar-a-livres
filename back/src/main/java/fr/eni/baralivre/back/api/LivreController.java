@@ -51,7 +51,7 @@ public class LivreController {
 
         Page<LivreDTO> livres = livreService.search(categorieIds, titre, page, size);
         if (livres.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(livres);
         }
         return ResponseEntity.ok(livres);
     }

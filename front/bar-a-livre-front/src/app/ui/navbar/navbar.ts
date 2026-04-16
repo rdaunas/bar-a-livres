@@ -7,13 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AuthService } from '../../core/services/auth.service';
 
-export interface NavItem {
-  label: string;
-  route: string;
-  icon?: string;
-}
+import { AuthService } from '../../core/services/auth-service';
+import { NavigationService } from '../../core/services/navigation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -33,34 +29,12 @@ export interface NavItem {
 export class Navbar {
 
   readonly auth = inject(AuthService);
+  readonly navigation = inject(NavigationService);
   private readonly breakpointObserver = inject(BreakpointObserver);
 
-  readonly isMobile = computed(() => {
-    return window.innerWidth <= 768;
-  });
-
-  readonly navItems = computed((): NavItem[] => {
-    switch (this.auth.role()) {
-      case 'adherent':
-        return [
-          { label: 'Consulter le catalogue', route: '/catalogue', icon: 'menu_book' },
-        ];
-      case 'bibliothecaire':
-        return [
-          { label: 'Gestion des emprunts', route: '/emprunts', icon: 'assignment' },
-          { label: 'Consulter le catalogue', route: '/catalogue', icon: 'menu_book' },
-          { label: 'Ajouter un livre', route: '/livres/ajouter', icon: 'add_circle' },
-          { label: 'Statistiques', route: '/statistiques', icon: 'bar_chart' },
-        ];
-      case 'admin':
-        return [
-          { label: 'Liste des utilisateurs', route: '/utilisateurs', icon: 'group' },
-          { label: 'Statistiques', route: '/statistiques', icon: 'bar_chart' },
-        ];
-      default: // 'user' non connecté
-        return [];
-    }
-  });
+  readonly isMobile = computed(() =>
+    this.breakpointObserver.isMatched(Breakpoints.Handset)
+  );
 
   goBack(): void {
     window.history.back();

@@ -3,6 +3,5 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/back/src/main/resources/Script_bdd/0-Init_DB.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/back/src/main/resources/Script_bdd/1-migration.sql" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/back/src/main/resources/Script_bdd/2-migration_ajout_status.sql" dialect="GenericSQL" />
   </component>
 </project>

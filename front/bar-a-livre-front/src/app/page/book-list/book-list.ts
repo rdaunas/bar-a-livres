@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatCard,
-  MatCardActions,
   MatCardContent,
   MatCardHeader,
   MatCardSubtitle,
@@ -14,7 +13,10 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BookService } from '../../core/services/book.service';
 import { LivreDTO } from '../../core/models/book.model';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
+import {MatFormField, MatInputModule, MatLabel} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import { MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-book-list',
@@ -26,12 +28,15 @@ import {Router, RouterLink} from '@angular/router';
     MatCardTitle,
     MatCardSubtitle,
     MatCardContent,
-    MatCardActions,
     MatButtonModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    RouterLink,
+    MatInputModule,
+    MatFormField,
+    MatLabel,
+    FormsModule,
+    MatIconModule
   ],
   templateUrl: './book-list.html',
   styleUrl: './book-list.css',
@@ -45,7 +50,6 @@ export class BookList implements OnInit {
   readonly books = signal<LivreDTO[]>([]);
   readonly isLoading = signal(false);
   readonly totalElements = signal(0);
-  readonly availabilityMap = signal<Record<string, boolean>>({});
 
   pageIndex = 0;
   pageSize = 20;
@@ -65,9 +69,6 @@ export class BookList implements OnInit {
         this.totalElements.set(page.totalElements);
         this.isLoading.set(false);
 
-        page.content.forEach(book => {
-          this.checkAvailability(book.isbn);
-        });
       },
       error: () => {
         this.snackBar.open('Erreur lors du chargement des livres.', 'Fermer', { duration: 3000 });
@@ -86,19 +87,29 @@ export class BookList implements OnInit {
     this.router.navigate(['/catalogue', isbn]);
   }
 
-  checkAvailability(isbn: string) {
-    this.bookService.isAvailable(isbn).subscribe(res => {
-      this.availabilityMap.update(map => ({
-        ...map,
-        [isbn]: res
-      }));
+  value = '';
+  categorieIds: number[] = [];
 
-      console.log(isbn, 'available:', res);
+  onSearch(): void {
+    const titre = this.value?.trim();
+
+    if (!titre || titre.length < 2) {
+      this.snackBar.open('Veuillez saisir au moins 2 caractères', 'OK', {
+        duration: 2000
+      });
+      return;
+    }
+
+    this.router.navigate(['/recherche'], {
+      queryParams: {
+        titre: this.value,
+        categorieIds: this.categorieIds.length ? this.categorieIds : null,
+
+        page: 0,
+        size: this.pageSize
+      },
+      queryParamsHandling: 'merge'
     });
-  }
-
-  canBorrow(isbn: string): boolean {
-    return this.availabilityMap()[isbn] ?? false;
   }
 
 }

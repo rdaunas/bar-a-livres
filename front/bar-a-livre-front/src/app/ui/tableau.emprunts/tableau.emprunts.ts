@@ -4,11 +4,12 @@ import {EmpruntModel} from '../../core/models/emprunt.model';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
+import {NgClass} from '@angular/common';
 
 
 @Component({
   selector: 'app-tableau',
-  imports: [MatTableModule, MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [MatTableModule, MatButtonModule, MatDividerModule, MatIconModule, NgClass],
   templateUrl: './tableau.emprunts.html',
   styleUrl: './tableau.emprunts.css',
 })

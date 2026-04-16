@@ -1,5 +1,5 @@
 -- =====================
--- TABLE USERS
+-- TABLE ROLE
 -- =====================
 CREATE TABLE role (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -16,7 +16,6 @@ CREATE TABLE users (
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role_id INT NOT NULL
-    FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 -- =====================
@@ -31,15 +30,14 @@ CREATE TABLE categorie (
 -- TABLE LIVRE
 -- =====================
 CREATE TABLE livre (
-    isbn VARCHAR(20) PRIMARY KEY,
+    isbn VARCHAR(13) PRIMARY KEY,
     couverture VARCHAR(255),
     titre VARCHAR(255) NOT NULL,
     auteur VARCHAR(255),
     description TEXT,
     nb_exemplaires INT DEFAULT 0,
     date_ajout DATE,
-    is_active BIT DEFAULT 1,
-    categorie_id INT,
+    is_active BIT DEFAULT 1
     );
 
 -- =====================
@@ -56,7 +54,7 @@ CREATE TABLE statut (
 CREATE TABLE emprunt (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL,
-    livre_isbn VARCHAR(20) NOT NULL,
+    livre_isbn VARCHAR(13) NOT NULL,
     statut_id INT,
     date_demande DATE,
     date_emprunt DATE,
@@ -73,7 +71,7 @@ CREATE TABLE emprunt (
 CREATE TABLE feedback (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL,
-    livre_isbn VARCHAR(20) NOT NULL,
+    livre_isbn VARCHAR(13) NOT NULL,
     note INT CHECK (note BETWEEN 1 AND 5),
     commentaire TEXT,
     date_publication DATE,
@@ -86,7 +84,7 @@ CREATE TABLE feedback (
 -- TABLE MANY TO MANY LIVRE_CATEGORIE
 -- =====================
 CREATE TABLE livre_categorie (
-    livre_isbn VARCHAR(20),
+    livre_isbn VARCHAR(13),
     categorie_id INT,
     PRIMARY KEY (livre_isbn, categorie_id),
     FOREIGN KEY (livre_isbn) REFERENCES livre(isbn),

@@ -1,0 +1,46 @@
+<div class="flex flex-col my-20">
+  <form (submit)="onSubmit($event)" [formGroup]="signupForm">
+    <div class="flex flex-col w-sm rounded-3xl border-1 border-blue-500 m-auto p-10">
+      <h2 class="place-self-center text-lg text-blue-500 mb-10">Inscription</h2>
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input
+          matInput
+          placeholder="pat@example.com"
+          formControlName="email"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your last name</mat-label>
+        <input
+          matInput
+          placeholder="Example"
+          formControlName="lastName"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your first name</mat-label>
+        <input
+          matInput
+          placeholder="Example"
+          formControlName="firstName"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder=""
+          formControlName="password"
+          required
+        />
+        <mat-hint >min 12 caractères dont une minuscule, une majuscule un chiffre et un caractère spécial</mat-hint>
+      </mat-form-field>
+      <button matButton="filled" type="submit" [disabled]="!signupForm.valid" class="my-10">S'inscrire</button>
+    </div>
+  </form>
+</div>

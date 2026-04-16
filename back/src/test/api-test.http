@@ -1,6 +1,7 @@
 ### Variables
 @baseUrl = http://localhost:8080
 @livreIsbn = ISBN024
+@userId = 1
 
 ### GET - Récupérer tous les emprunts (LIBRARIAN)
 GET {{baseUrl}}/api/loans
@@ -20,5 +21,5 @@ Content-Type: application/json
 }
 
 ### PUT - Retourner un livre
-PUT {{baseUrl}}/api/loans/11/return
+PUT {{baseUrl}}/api/loans/15/return
 
