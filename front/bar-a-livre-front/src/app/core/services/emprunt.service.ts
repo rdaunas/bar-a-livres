@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EmpruntModel} from '../models/emprunt.model';
 import {Observable} from 'rxjs';
 import {AuthService} from './auth-service';
@@ -17,6 +17,6 @@ export class EmpruntService {
     return this.http.get<EmpruntModel[]>(this.apiUrl,{headers : this.auth.addToken() });
   }
   retournerLivre(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/return`,{headers : this.auth.addToken(), body: null });
+    return this.http.put<void>(`${this.apiUrl}/${id}/return`,{},{headers : this.auth.addToken() });
   }
 }

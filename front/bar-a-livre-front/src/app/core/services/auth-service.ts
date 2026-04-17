@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {jwtDecode, JwtPayload} from "jwt-decode";
 import {Router} from '@angular/router';
@@ -30,6 +30,7 @@ export class AuthService {
 
   private http = inject(HttpClient);
   private router = inject(Router);
+
 
   public addToken() : HttpHeaders {
     return new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')});
@@ -80,6 +81,7 @@ export class AuthService {
 
   public logout() {
     localStorage.removeItem("token");
+    this.router.navigate(['/catalogue']);
   }
 
   public isAuthenticated() {

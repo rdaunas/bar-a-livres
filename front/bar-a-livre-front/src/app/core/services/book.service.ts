@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LivreDTO, PageResponse } from '../models/book.model';
+import {AuthService} from './auth-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class BookService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/books';
   private readonly apiUrlloans = 'http://localhost:8080/api/loans';
+
+  private auth = inject(AuthService);
 
   findAll(page: number = 0, size: number = 20): Observable<PageResponse<LivreDTO>> {
     const params = new HttpParams()
@@ -46,9 +49,7 @@ export class BookService {
     return this.http.post<LivreDTO>(`${this.apiUrlloans}`, {
       livreIsbn: isbn
     }, {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
+      headers: this.auth.addToken()
     });
   }
 }
